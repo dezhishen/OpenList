@@ -97,10 +97,7 @@ func (d *S3) Link(ctx context.Context, file model.Obj, args model.LinkArgs) (*mo
 		input.ResponseContentDisposition = &disposition
 	}
 
-	req, reqErr := d.linkClient.GetObjectRequest(input)
-	if reqErr != nil {
-		return nil, fmt.Errorf("failed to create GetObject request: %w", reqErr)
-	}
+	req, _ := d.linkClient.GetObjectRequest(input)
 	var link model.Link
 	var err error
 	if d.CustomHost != "" {
