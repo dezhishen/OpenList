@@ -44,9 +44,11 @@ type LogConfig struct {
 	MaxBackups int    `json:"max_backups" env:"MAX_BACKUPS"`
 	MaxAge     int    `json:"max_age" env:"MAX_AGE"`
 	Compress   bool   `json:"compress" env:"COMPRESS"`
-	Filter     LogFilterConfig `json:"filter"`
+	Filter     LogFilterConfig `json:"filter"` // Log filtering configuration (config file only, no env support)
 }
 
+// LogFilterConfig holds configuration for log filtering
+// Note: This configuration is only supported via config file, not environment variables
 type LogFilterConfig struct {
 	// EnableFiltering controls whether log filtering is enabled
 	EnableFiltering bool `json:"enable_filtering"`
