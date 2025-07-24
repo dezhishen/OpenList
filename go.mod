@@ -89,6 +89,7 @@ require (
 	github.com/minio/xxml v0.0.3 // indirect
 	github.com/otiai10/mint v1.6.3 // indirect
 	gopkg.in/go-jose/go-jose.v2 v2.6.3 // indirect
+	github.com/xo/terminfo v0.0.0-20220910002029-abceb7e1c41e // indirect
 )
 
 require (
