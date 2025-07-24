@@ -13,11 +13,10 @@ import (
 	"github.com/OpenListTeam/OpenList/v4/internal/driver"
 	"github.com/OpenListTeam/OpenList/v4/internal/errs"
 	"github.com/OpenListTeam/OpenList/v4/internal/model"
-	streamPkg "github.com/OpenListTeam/OpenList/v4/internal/stream"
-	"github.com/avast/retry-go"
-
 	"github.com/OpenListTeam/OpenList/v4/internal/op"
+	streamPkg "github.com/OpenListTeam/OpenList/v4/internal/stream"
 	"github.com/OpenListTeam/OpenList/v4/pkg/utils"
+	"github.com/avast/retry-go"
 	"github.com/go-resty/resty/v2"
 	jsoniter "github.com/json-iterator/go"
 )
@@ -42,7 +41,7 @@ var onedriveHostMap = map[string]Host{
 }
 
 func (d *OnedriveAPP) GetMetaUrl(auth bool, path string) string {
-	host, _ := onedriveHostMap[d.Region]
+	host := onedriveHostMap[d.Region]
 	path = utils.EncodePath(path, true)
 	if auth {
 		return host.Oauth
