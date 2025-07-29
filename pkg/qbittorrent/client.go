@@ -69,6 +69,7 @@ func (c *client) authorized() bool {
 	if err != nil {
 		return false
 	}
+	defer resp.Body.Close()
 	return resp.StatusCode == 200 // the status code will be 403 if not authorized
 }
 
@@ -82,7 +83,7 @@ func (c *client) login() error {
 	if err != nil {
 		return err
 	}
-
+	defer resp.Body.Close()
 	// check result
 	body := make([]byte, 2)
 	_, err = resp.Body.Read(body)
@@ -95,6 +96,8 @@ func (c *client) login() error {
 	return nil
 }
 
+// post sends a POST request to the qBittorrent WebUI API.
+// must close the response body after using it
 func (c *client) post(path string, data url.Values) (*http.Response, error) {
 	u := c.url.JoinPath(path)
 	u.User = nil // remove userinfo for requests
@@ -157,6 +160,7 @@ func (c *client) AddFromLink(link string, savePath string, id string) error {
 	if err != nil {
 		return err
 	}
+	defer resp.Body.Close()
 
 	// check result
 	body := make([]byte, 2)
@@ -271,6 +275,7 @@ func (c *client) GetInfo(id string) (TorrentInfo, error) {
 	if err != nil {
 		return TorrentInfo{}, err
 	}
+	defer response.Body.Close()
 
 	body, err := io.ReadAll(response.Body)
 	if err != nil {
@@ -316,6 +321,7 @@ func (c *client) GetFiles(id string) ([]FileInfo, error) {
 	if err != nil {
 		return []FileInfo{}, err
 	}
+	defer response.Body.Close()
 
 	body, err := io.ReadAll(response.Body)
 	if err != nil {
@@ -359,6 +365,7 @@ func (c *client) Delete(id string, deleteFiles bool) error {
 	if err != nil {
 		return err
 	}
+	defer response.Body.Close()
 	if response.StatusCode != 200 {
 		return errors.New("failed to delete qbittorrent tag")
 	}
