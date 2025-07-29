@@ -355,18 +355,18 @@ func (c *client) Delete(id string, deleteFiles bool) error {
 	if err != nil {
 		return err
 	}
+	defer response.Body.Close()
 	if response.StatusCode != 200 {
 		return errors.New("failed to delete qbittorrent task")
 	}
-
 	v = url.Values{}
 	v.Set("tags", "openlist-"+id)
-	response, err = c.post("/api/v2/torrents/deleteTags", v)
+	responseForTag, err := c.post("/api/v2/torrents/deleteTags", v)
 	if err != nil {
 		return err
 	}
-	defer response.Body.Close()
-	if response.StatusCode != 200 {
+	defer responseForTag.Body.Close()
+	if responseForTag.StatusCode != 200 {
 		return errors.New("failed to delete qbittorrent tag")
 	}
 	return nil
