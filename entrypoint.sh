@@ -16,7 +16,8 @@ else
   if [ "$RUN_ARIA2" = "true" ]; then
     # If aria2 should run and target directory doesn't exist, copy it
     if [ ! -d "$ARIA2_DIR" ]; then
-      cp -r /opt/service/stop/aria2 "$ARIA2_DIR" 2>/dev/null
+      mkdir -p "$ARIA2_DIR"
+      cp -r /opt/service/stop/aria2/* "$ARIA2_DIR" 2>/dev/null
     fi
   else
     # If aria2 should NOT run and target directory exists, remove it
