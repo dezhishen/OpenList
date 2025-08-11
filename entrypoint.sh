@@ -5,6 +5,11 @@ umask ${UMASK}
 if [ "$1" = "version" ]; then
   ./openlist version
 else
+  # Define the target directory path for openlist service
+  OPENLIST_DIR="/opt/service/start/openlist"
+  if [ ! -d "$OPENLIST_DIR" ]; then
+    cp -r /opt/service/stop/openlist "$OPENLIST_DIR" 2>/dev/null
+  fi
   # Define the target directory path for aria2 service
   ARIA2_DIR="/opt/service/start/aria2"
   
