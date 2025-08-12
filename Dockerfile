@@ -12,7 +12,6 @@ RUN bash build.sh release docker
 
 FROM openlistteam/openlist-base-image:${BASE_IMAGE_TAG}
 LABEL MAINTAINER="OpenList"
-ARG TARGETPLATFORM
 ARG INSTALL_FFMPEG=false
 ARG INSTALL_ARIA2=false
 ARG USER=openlist
