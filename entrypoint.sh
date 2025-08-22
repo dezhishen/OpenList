@@ -8,7 +8,7 @@ else
   # Define the target directory path for aria2 service
   # Check file of /opt/openlist/data permissions for current user
 # 检查当前用户是否有当前目录的写权限
-  if ! [ -w . ]; then
+  if ! [ -w ./data ]; then
     cat <<EOF
 Error: Current user does not have write permissions in the current directory: $(pwd)
 Please visit https://doc.oplist.org/guide/installation/docker#for-version-after-v4-1-0 for more information.
