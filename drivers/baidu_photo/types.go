@@ -6,7 +6,7 @@ import (
 
 	"github.com/OpenListTeam/OpenList/v4/pkg/utils"
 
-	"github.com/OpenListTeam/OpenList/v4/internal/model"
+	"github.com/OpenListTeam/OpenList/v4/pkg/model"
 )
 
 type TokenErrResp struct {

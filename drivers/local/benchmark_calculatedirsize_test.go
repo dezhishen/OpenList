@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/OpenListTeam/OpenList/v4/internal/driver"
+	"github.com/OpenListTeam/OpenList/v4/pkg/driver"
 )
 
 func generatedTestDir(dir string, dep, filecount int) {

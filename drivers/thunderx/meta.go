@@ -4,8 +4,8 @@ import (
 	"crypto/md5"
 	"encoding/hex"
 
-	"github.com/OpenListTeam/OpenList/v4/internal/driver"
-	"github.com/OpenListTeam/OpenList/v4/internal/op"
+	"github.com/OpenListTeam/OpenList/v4/pkg/driver"
+	"github.com/OpenListTeam/OpenList/v4/pkg/op"
 	"github.com/OpenListTeam/OpenList/v4/pkg/utils"
 )
 

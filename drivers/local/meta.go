@@ -1,8 +1,8 @@
 package local
 
 import (
-	"github.com/OpenListTeam/OpenList/v4/internal/driver"
-	"github.com/OpenListTeam/OpenList/v4/internal/op"
+	"github.com/OpenListTeam/OpenList/v4/pkg/driver"
+	"github.com/OpenListTeam/OpenList/v4/pkg/op"
 )
 
 type Addition struct {

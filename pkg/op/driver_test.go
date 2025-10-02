@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	_ "github.com/OpenListTeam/OpenList/v4/drivers"
-	"github.com/OpenListTeam/OpenList/v4/internal/op"
+	"github.com/OpenListTeam/OpenList/v4/pkg/op"
 )
 
 func TestDriverItemsMap(t *testing.T) {

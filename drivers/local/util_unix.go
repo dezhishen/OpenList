@@ -7,7 +7,7 @@ import (
 	"strings"
 	"syscall"
 
-	"github.com/OpenListTeam/OpenList/v4/internal/model"
+	"github.com/OpenListTeam/OpenList/v4/pkg/model"
 )
 
 func isHidden(f fs.FileInfo, _ string) bool {

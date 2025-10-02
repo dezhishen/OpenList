@@ -9,10 +9,10 @@ import (
 	"github.com/OpenListTeam/OpenList/v4/internal/errs"
 
 	"github.com/OpenListTeam/OpenList/v4/internal/conf"
-	"github.com/OpenListTeam/OpenList/v4/internal/model"
 	"github.com/OpenListTeam/OpenList/v4/internal/offline_download/tool"
 	"github.com/OpenListTeam/OpenList/v4/internal/setting"
 	"github.com/OpenListTeam/OpenList/v4/pkg/aria2/rpc"
+	"github.com/OpenListTeam/OpenList/v4/pkg/model"
 	"github.com/pkg/errors"
 	log "github.com/sirupsen/logrus"
 )

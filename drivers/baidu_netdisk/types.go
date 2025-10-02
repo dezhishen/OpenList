@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/OpenListTeam/OpenList/v4/internal/model"
+	"github.com/OpenListTeam/OpenList/v4/pkg/model"
 	"github.com/OpenListTeam/OpenList/v4/pkg/utils"
 )
 

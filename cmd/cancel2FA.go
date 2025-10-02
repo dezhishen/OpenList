@@ -6,7 +6,7 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/OpenListTeam/OpenList/v4/internal/op"
+	"github.com/OpenListTeam/OpenList/v4/pkg/op"
 	"github.com/OpenListTeam/OpenList/v4/pkg/utils"
 	"github.com/spf13/cobra"
 )

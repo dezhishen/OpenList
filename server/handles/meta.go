@@ -5,8 +5,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/OpenListTeam/OpenList/v4/internal/model"
-	"github.com/OpenListTeam/OpenList/v4/internal/op"
+	"github.com/OpenListTeam/OpenList/v4/pkg/model"
+	"github.com/OpenListTeam/OpenList/v4/pkg/op"
 	"github.com/OpenListTeam/OpenList/v4/server/common"
 	"github.com/dlclark/regexp2"
 	"github.com/gin-gonic/gin"

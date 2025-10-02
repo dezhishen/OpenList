@@ -7,9 +7,9 @@ import (
 	"time"
 
 	sdk "github.com/OpenListTeam/115-sdk-go"
-	"github.com/OpenListTeam/OpenList/v4/internal/driver"
-	"github.com/OpenListTeam/OpenList/v4/internal/model"
 	streamPkg "github.com/OpenListTeam/OpenList/v4/internal/stream"
+	"github.com/OpenListTeam/OpenList/v4/pkg/driver"
+	"github.com/OpenListTeam/OpenList/v4/pkg/model"
 	"github.com/OpenListTeam/OpenList/v4/pkg/utils"
 	"github.com/aliyun/aliyun-oss-go-sdk/oss"
 	"github.com/avast/retry-go"

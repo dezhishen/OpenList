@@ -6,7 +6,7 @@ import (
 	"fmt"
 
 	"github.com/OpenListTeam/OpenList/v4/drivers/base"
-	"github.com/OpenListTeam/OpenList/v4/internal/op"
+	"github.com/OpenListTeam/OpenList/v4/pkg/op"
 	log "github.com/sirupsen/logrus"
 )
 

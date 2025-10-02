@@ -2,6 +2,7 @@ package tool
 
 import (
 	"context"
+
 	"github.com/OpenListTeam/OpenList/v4/drivers/thunder_browser"
 
 	_115_open "github.com/OpenListTeam/OpenList/v4/drivers/115_open"
@@ -18,10 +19,10 @@ import (
 	"github.com/OpenListTeam/OpenList/v4/internal/conf"
 	"github.com/OpenListTeam/OpenList/v4/internal/errs"
 	"github.com/OpenListTeam/OpenList/v4/internal/fs"
-	"github.com/OpenListTeam/OpenList/v4/internal/model"
-	"github.com/OpenListTeam/OpenList/v4/internal/op"
 	"github.com/OpenListTeam/OpenList/v4/internal/setting"
 	"github.com/OpenListTeam/OpenList/v4/internal/task"
+	"github.com/OpenListTeam/OpenList/v4/pkg/model"
+	"github.com/OpenListTeam/OpenList/v4/pkg/op"
 	"github.com/google/uuid"
 	"github.com/pkg/errors"
 )

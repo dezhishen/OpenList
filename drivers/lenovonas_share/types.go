@@ -6,7 +6,7 @@ import (
 
 	"github.com/OpenListTeam/OpenList/v4/pkg/utils"
 
-	_ "github.com/OpenListTeam/OpenList/v4/internal/model"
+	_ "github.com/OpenListTeam/OpenList/v4/pkg/model"
 )
 
 func (f *File) UnmarshalJSON(data []byte) error {

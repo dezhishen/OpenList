@@ -4,7 +4,7 @@ import (
 	"time"
 
 	"github.com/OpenListTeam/OpenList/v4/internal/db"
-	"github.com/OpenListTeam/OpenList/v4/internal/model"
+	"github.com/OpenListTeam/OpenList/v4/pkg/model"
 	"github.com/pkg/errors"
 	"golang.org/x/crypto/ssh"
 )

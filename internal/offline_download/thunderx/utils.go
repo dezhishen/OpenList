@@ -2,11 +2,12 @@ package thunderx
 
 import (
 	"context"
+	"time"
+
 	"github.com/OpenListTeam/OpenList/v4/drivers/thunderx"
-	"github.com/OpenListTeam/OpenList/v4/internal/op"
+	"github.com/OpenListTeam/OpenList/v4/pkg/op"
 	"github.com/OpenListTeam/OpenList/v4/pkg/singleflight"
 	"github.com/OpenListTeam/go-cache"
-	"time"
 )
 
 var taskCache = cache.NewMemCache(cache.WithShards[[]thunderx.OfflineTask](16))

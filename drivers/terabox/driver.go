@@ -16,8 +16,8 @@ import (
 	"github.com/avast/retry-go"
 	log "github.com/sirupsen/logrus"
 
-	"github.com/OpenListTeam/OpenList/v4/internal/driver"
-	"github.com/OpenListTeam/OpenList/v4/internal/model"
+	"github.com/OpenListTeam/OpenList/v4/pkg/driver"
+	"github.com/OpenListTeam/OpenList/v4/pkg/model"
 )
 
 type Terabox struct {

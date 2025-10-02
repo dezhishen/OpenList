@@ -1,7 +1,7 @@
 package v3_41_0
 
 import (
-	"github.com/OpenListTeam/OpenList/v4/internal/op"
+	"github.com/OpenListTeam/OpenList/v4/pkg/op"
 	"github.com/OpenListTeam/OpenList/v4/pkg/utils"
 )
 

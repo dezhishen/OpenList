@@ -3,7 +3,7 @@ package setting
 import (
 	"strconv"
 
-	"github.com/OpenListTeam/OpenList/v4/internal/op"
+	"github.com/OpenListTeam/OpenList/v4/pkg/op"
 )
 
 func GetStr(key string, defaultValue ...string) string {

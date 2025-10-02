@@ -6,7 +6,7 @@ import (
 
 	"github.com/OpenListTeam/OpenList/v4/internal/conf"
 
-	"github.com/OpenListTeam/OpenList/v4/internal/driver"
+	"github.com/OpenListTeam/OpenList/v4/pkg/driver"
 	"github.com/pkg/errors"
 )
 

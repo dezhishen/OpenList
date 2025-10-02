@@ -3,7 +3,7 @@ package driver
 import (
 	"context"
 
-	"github.com/OpenListTeam/OpenList/v4/internal/model"
+	"github.com/OpenListTeam/OpenList/v4/pkg/model"
 )
 
 type Driver interface {

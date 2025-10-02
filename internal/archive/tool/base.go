@@ -3,8 +3,8 @@ package tool
 import (
 	"io"
 
-	"github.com/OpenListTeam/OpenList/v4/internal/model"
 	"github.com/OpenListTeam/OpenList/v4/internal/stream"
+	"github.com/OpenListTeam/OpenList/v4/pkg/model"
 )
 
 type MultipartExtension struct {

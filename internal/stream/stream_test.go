@@ -8,8 +8,8 @@ import (
 	"testing"
 
 	"github.com/OpenListTeam/OpenList/v4/internal/conf"
-	"github.com/OpenListTeam/OpenList/v4/internal/model"
 	"github.com/OpenListTeam/OpenList/v4/pkg/http_range"
+	"github.com/OpenListTeam/OpenList/v4/pkg/model"
 )
 
 func TestFileStream_RangeRead(t *testing.T) {

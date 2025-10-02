@@ -2,7 +2,7 @@ package handles
 
 import (
 	"strings"
-	
+
 	_115 "github.com/OpenListTeam/OpenList/v4/drivers/115"
 	_115_open "github.com/OpenListTeam/OpenList/v4/drivers/115_open"
 	"github.com/OpenListTeam/OpenList/v4/drivers/pikpak"
@@ -10,10 +10,10 @@ import (
 	"github.com/OpenListTeam/OpenList/v4/drivers/thunder_browser"
 	"github.com/OpenListTeam/OpenList/v4/drivers/thunderx"
 	"github.com/OpenListTeam/OpenList/v4/internal/conf"
-	"github.com/OpenListTeam/OpenList/v4/internal/model"
 	"github.com/OpenListTeam/OpenList/v4/internal/offline_download/tool"
-	"github.com/OpenListTeam/OpenList/v4/internal/op"
 	"github.com/OpenListTeam/OpenList/v4/internal/task"
+	"github.com/OpenListTeam/OpenList/v4/pkg/model"
+	"github.com/OpenListTeam/OpenList/v4/pkg/op"
 	"github.com/OpenListTeam/OpenList/v4/server/common"
 	"github.com/gin-gonic/gin"
 )
@@ -413,7 +413,7 @@ func AddOfflineDownload(c *gin.Context) {
 		if trimmedUrl == "" {
 			continue
 		}
-		
+
 		t, err := tool.AddURL(c, &tool.AddURLArgs{
 			URL:          trimmedUrl,
 			DstDirPath:   reqPath,
