@@ -8,6 +8,7 @@ import (
 	"github.com/OpenListTeam/OpenList/v4/internal/bootstrap"
 	"github.com/OpenListTeam/OpenList/v4/internal/bootstrap/data"
 	"github.com/OpenListTeam/OpenList/v4/internal/db"
+	"github.com/OpenListTeam/OpenList/v4/pkg/plugin"
 	"github.com/OpenListTeam/OpenList/v4/pkg/utils"
 	log "github.com/sirupsen/logrus"
 )
@@ -15,6 +16,7 @@ import (
 func Init() {
 	bootstrap.InitConfig()
 	bootstrap.Log()
+	bootstrap.InitPlugin()
 	bootstrap.InitDB()
 	data.InitData()
 	bootstrap.InitStreamLimit()
@@ -23,6 +25,7 @@ func Init() {
 }
 
 func Release() {
+	plugin.Close()
 	db.Close()
 }
 

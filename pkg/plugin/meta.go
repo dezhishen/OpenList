@@ -9,19 +9,17 @@ import (
 
 type PluginInfo struct {
 	// 名称
-	Name string `json:"name"`
-	// 描述
-	Description string `json:"description"`
-	// 协议
-	Protocol string `json:"protocol"`
+	Name        string   `json:"name"`
+	Drivers     []string `json:"drivers"`
+	Description string   `json:"description"`
+	Version     string   `json:"version"`
 }
 
 type PluginDriver []driver.Driver
 
 // 定义plugin的接口
-type Plugin interface {
+type MainDriversPlugin interface {
 	Info() PluginInfo
-	Drivers() PluginDriver
 }
 
 var HandshakeConfig = go_plugin.HandshakeConfig{
