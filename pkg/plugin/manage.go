@@ -64,8 +64,8 @@ func loadPlugin(path string) (Plugin, *plugin.Client, error) {
 	// We're a host! Start by launching the plugin process.
 	client := plugin.NewClient(&plugin.ClientConfig{
 		HandshakeConfig: HandshakeConfig,
-		Plugins:         map[string]plugin.Plugin{
-			// todo register more plugins here
+		Plugins: map[string]plugin.Plugin{
+			"main": &PluginNetRpcPlugin{},
 		},
 		Cmd: exec.Command(path),
 		AllowedProtocols: []plugin.Protocol{
