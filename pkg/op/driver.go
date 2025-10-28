@@ -2,7 +2,6 @@ package op
 
 import (
 	"reflect"
-	"strings"
 
 	"github.com/OpenListTeam/OpenList/v4/internal/conf"
 
@@ -50,7 +49,8 @@ func registerDriverItems(config driver.Config, addition driver.Additional) {
 		tAddition = tAddition.Elem()
 	}
 	mainItems := getMainItems(config)
-	additionalItems := getAdditionalItems(tAddition, config.DefaultRoot)
+	additionalItems := addition.GetItems()
+	processDefaultRoot(additionalItems, config.DefaultRoot)
 	driverInfoMap[config.Name] = driver.Info{
 		Common:     mainItems,
 		Additional: additionalItems,
@@ -153,42 +153,61 @@ func getMainItems(config driver.Config) []driver.Item {
 	})
 	return items
 }
-func getAdditionalItems(t reflect.Type, defaultRoot string) []driver.Item {
-	var items []driver.Item
-	for i := 0; i < t.NumField(); i++ {
-		field := t.Field(i)
-		if field.Type.Kind() == reflect.Struct {
-			items = append(items, getAdditionalItems(field.Type, defaultRoot)...)
-			continue
-		}
-		tag := field.Tag
-		ignore, ok1 := tag.Lookup("ignore")
-		name, ok2 := tag.Lookup("json")
-		if (ok1 && ignore == "true") || !ok2 {
-			continue
-		}
-		item := driver.Item{
-			Name:     name,
-			Type:     strings.ToLower(field.Type.Name()),
-			Default:  tag.Get("default"),
-			Options:  tag.Get("options"),
-			Required: tag.Get("required") == "true",
-			Help:     tag.Get("help"),
-		}
-		if tag.Get("type") != "" {
-			item.Type = tag.Get("type")
-		}
+
+// processDefaultRoot sets the default root value for additional items if applicable.
+func processDefaultRoot(additionalItems []driver.Item, defaultRoot string) {
+	if defaultRoot == "" {
+		return
+	}
+	if len(additionalItems) == 0 {
+		return
+	}
+	for i, item := range additionalItems {
 		if item.Name == "root_folder_id" || item.Name == "root_folder_path" {
 			if item.Default == "" {
-				item.Default = defaultRoot
+				additionalItems[i].Default = defaultRoot
 			}
-			item.Required = item.Default != ""
+			additionalItems[i].Required = additionalItems[i].Default != ""
 		}
-		// set default type to string
-		if item.Type == "" {
-			item.Type = "string"
-		}
-		items = append(items, item)
 	}
-	return items
 }
+
+// func getAdditionalItems(t reflect.Type, defaultRoot string) []driver.Item {
+// 	var items []driver.Item
+// 	for i := 0; i < t.NumField(); i++ {
+// 		field := t.Field(i)
+// 		if field.Type.Kind() == reflect.Struct {
+// 			items = append(items, getAdditionalItems(field.Type, defaultRoot)...)
+// 			continue
+// 		}
+// 		tag := field.Tag
+// 		ignore, ok1 := tag.Lookup("ignore")
+// 		name, ok2 := tag.Lookup("json")
+// 		if (ok1 && ignore == "true") || !ok2 {
+// 			continue
+// 		}
+// 		item := driver.Item{
+// 			Name:     name,
+// 			Type:     strings.ToLower(field.Type.Name()),
+// 			Default:  tag.Get("default"),
+// 			Options:  tag.Get("options"),
+// 			Required: tag.Get("required") == "true",
+// 			Help:     tag.Get("help"),
+// 		}
+// 		if tag.Get("type") != "" {
+// 			item.Type = tag.Get("type")
+// 		}
+// 		if item.Name == "root_folder_id" || item.Name == "root_folder_path" {
+// 			if item.Default == "" {
+// 				item.Default = defaultRoot
+// 			}
+// 			item.Required = item.Default != ""
+// 		}
+// 		// set default type to string
+// 		if item.Type == "" {
+// 			item.Type = "string"
+// 		}
+// 		items = append(items, item)
+// 	}
+// 	return items
+// }

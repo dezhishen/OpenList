@@ -13,10 +13,10 @@ import (
 
 // do others that not defined in Driver interface
 
-func (d *YandexDisk) refreshToken() error {
+func (y *YandexDisk) refreshToken() error {
 	// 使用在线API刷新Token，无需ClientID和ClientSecret
-	if d.UseOnlineAPI && len(d.APIAddress) > 0 {
-		u := d.APIAddress
+	if y.UseOnlineAPI && len(y.APIAddress) > 0 {
+		u := y.APIAddress
 		var resp struct {
 			RefreshToken string `json:"refresh_token"`
 			AccessToken  string `json:"access_token"`
@@ -26,7 +26,7 @@ func (d *YandexDisk) refreshToken() error {
 			SetHeader("User-Agent", "Mozilla/5.0 (Macintosh; Apple macOS 15_5) AppleWebKit/537.36 (KHTML, like Gecko) Safari/537.36 Chrome/138.0.0.0 Openlist/425.6.30").
 			SetResult(&resp).
 			SetQueryParams(map[string]string{
-				"refresh_ui": d.RefreshToken,
+				"refresh_ui": y.RefreshToken,
 				"server_use": "true",
 				"driver_txt": "yandexui_go",
 			}).
@@ -40,13 +40,13 @@ func (d *YandexDisk) refreshToken() error {
 			}
 			return fmt.Errorf("empty token returned from official API , a wrong refresh token may have been used")
 		}
-		d.AccessToken = resp.AccessToken
-		d.RefreshToken = resp.RefreshToken
-		op.MustSaveDriverStorage(d)
+		y.AccessToken = resp.AccessToken
+		y.RefreshToken = resp.RefreshToken
+		op.MustSaveDriverStorage(y)
 		return nil
 	}
 	// 使用本地客户端的情况下检查是否为空
-	if d.ClientID == "" || d.ClientSecret == "" {
+	if y.ClientID == "" || y.ClientSecret == "" {
 		return fmt.Errorf("empty ClientID or ClientSecret")
 	}
 	// 走原有的刷新逻辑
@@ -55,9 +55,9 @@ func (d *YandexDisk) refreshToken() error {
 	var e TokenErrResp
 	_, err := base.RestyClient.R().SetResult(&resp).SetError(&e).SetFormData(map[string]string{
 		"grant_type":    "refresh_token",
-		"refresh_token": d.RefreshToken,
-		"client_id":     d.ClientID,
-		"client_secret": d.ClientSecret,
+		"refresh_token": y.RefreshToken,
+		"client_id":     y.ClientID,
+		"client_secret": y.ClientSecret,
 	}).Post(u)
 	if err != nil {
 		return err
@@ -65,15 +65,15 @@ func (d *YandexDisk) refreshToken() error {
 	if e.Error != "" {
 		return fmt.Errorf("%s : %s", e.Error, e.ErrorDescription)
 	}
-	d.AccessToken, d.RefreshToken = resp.AccessToken, resp.RefreshToken
-	op.MustSaveDriverStorage(d)
+	y.AccessToken, y.RefreshToken = resp.AccessToken, resp.RefreshToken
+	op.MustSaveDriverStorage(y)
 	return nil
 }
 
-func (d *YandexDisk) request(pathname string, method string, callback base.ReqCallback, resp interface{}) ([]byte, error) {
+func (y *YandexDisk) request(pathname string, method string, callback base.ReqCallback, resp interface{}) ([]byte, error) {
 	u := "https://cloud-api.yandex.net/v1/disk/resources" + pathname
 	req := base.RestyClient.R()
-	req.SetHeader("Authorization", "OAuth "+d.AccessToken)
+	req.SetHeader("Authorization", "OAuth "+y.AccessToken)
 	if callback != nil {
 		callback(req)
 	}
@@ -89,18 +89,18 @@ func (d *YandexDisk) request(pathname string, method string, callback base.ReqCa
 	//log.Debug(res.String())
 	if e.Error != "" {
 		if e.Error == "UnauthorizedError" {
-			err = d.refreshToken()
+			err = y.refreshToken()
 			if err != nil {
 				return nil, err
 			}
-			return d.request(pathname, method, callback, resp)
+			return y.request(pathname, method, callback, resp)
 		}
 		return nil, errors.New(e.Description)
 	}
 	return res.Body(), nil
 }
 
-func (d *YandexDisk) getFiles(path string) ([]File, error) {
+func (y *YandexDisk) getFiles(path string) ([]File, error) {
 	limit := 100
 	page := 1
 	res := make([]File, 0)
@@ -111,15 +111,15 @@ func (d *YandexDisk) getFiles(path string) ([]File, error) {
 			"limit":  strconv.Itoa(limit),
 			"offset": strconv.Itoa(offset),
 		}
-		if d.OrderBy != "" {
-			if d.OrderDirection == "desc" {
-				query["sort"] = "-" + d.OrderBy
+		if y.OrderBy != "" {
+			if y.OrderDirection == "desc" {
+				query["sort"] = "-" + y.OrderBy
 			} else {
-				query["sort"] = d.OrderBy
+				query["sort"] = y.OrderBy
 			}
 		}
 		var resp FilesResp
-		_, err := d.request("", http.MethodGet, func(req *resty.Request) {
+		_, err := y.request("", http.MethodGet, func(req *resty.Request) {
 			req.SetQueryParams(query)
 		}, &resp)
 		if err != nil {

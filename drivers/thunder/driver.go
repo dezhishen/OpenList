@@ -35,7 +35,22 @@ func (x *Thunder) Config() driver.Config {
 }
 
 func (x *Thunder) GetAddition() driver.Additional {
-	return &x.Addition
+	addition, err := driver.NewSimpleAdditional(x.RootID, x.Addition)
+	if err != nil {
+		panic(err)
+	}
+	return addition
+	// return &x.Addition
+}
+
+func (x *Thunder) SetAddition(additional driver.Additional) {
+	if additional != nil {
+		x.Addition = Addition{}
+		err := additional.UnmarshalData(&x.Addition)
+		if err != nil {
+			panic(err)
+		}
+	}
 }
 
 func (x *Thunder) Init(ctx context.Context) (err error) {
@@ -142,7 +157,22 @@ func (x *ThunderExpert) Config() driver.Config {
 }
 
 func (x *ThunderExpert) GetAddition() driver.Additional {
-	return &x.ExpertAddition
+	addition, err := driver.NewSimpleAdditional(x.RootID, x.ExpertAddition)
+	if err != nil {
+		panic(err)
+	}
+	return addition
+	// return &x.ExpertAddition
+}
+
+func (x *ThunderExpert) SetAddition(additional driver.Additional) {
+	if additional != nil {
+		x.ExpertAddition = ExpertAddition{}
+		err := additional.UnmarshalData(&x.ExpertAddition)
+		if err != nil {
+			panic(err)
+		}
+	}
 }
 
 func (x *ThunderExpert) Init(ctx context.Context) (err error) {

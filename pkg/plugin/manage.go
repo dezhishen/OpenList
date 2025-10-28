@@ -19,7 +19,7 @@ func Init(path string) error {
 	// regsiterPlugins()
 	plugins, err := LoadPlugins(path)
 	if err != nil {
-		return err
+		panic(err)
 	}
 	for _, d := range plugins {
 		op.RegisterDriver(func() driver.Driver {
@@ -102,8 +102,8 @@ func loadPlugin(path string) (*PluginInfo, []driver.Driver, error) {
 		Description: tmpMain.Info().Description,
 		Drivers:     []string{},
 	}
-	rpcClient.Close()
 	client.Kill()
+	rpcClient.Close()
 	if len(drivers) == 0 {
 		logrus.Warnf("plugin %s has no drivers", tmpMain.Info().Name)
 		return mainCopy, nil, nil
@@ -133,12 +133,11 @@ func loadPlugin(path string) (*PluginInfo, []driver.Driver, error) {
 			logrus.Error("dispense driver error:", err)
 			continue
 		}
-		drv, ok := d.(driver.Driver)
+		_rpcClient, ok := d.(driver.Driver)
 		if !ok {
 			logrus.Error("type assert driver error")
-			continue
 		}
-		ds = append(ds, drv)
+		ds = append(ds, _rpcClient)
 	}
 	return mainCopy, ds, nil
 }
@@ -146,6 +145,14 @@ func loadPlugin(path string) (*PluginInfo, []driver.Driver, error) {
 func isDir(path string) (bool, error) {
 	info, err := os.Stat(path)
 	if err != nil {
+		// 如果文件夹不存在，则尝试创建
+		if os.IsNotExist(err) {
+			err = os.MkdirAll(path, 0755)
+			if err != nil {
+				return false, err
+			}
+			return true, nil
+		}
 		return false, err
 	}
 	return info.IsDir(), nil

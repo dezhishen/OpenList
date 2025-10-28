@@ -31,7 +31,21 @@ func (d *AliyundriveOpen) Config() driver.Config {
 }
 
 func (d *AliyundriveOpen) GetAddition() driver.Additional {
-	return &d.Addition
+	additional, err := driver.NewSimpleAdditional(d.RootID, d.Addition)
+	if err != nil {
+		panic(err)
+	}
+	return additional
+}
+
+func (d *AliyundriveOpen) SetAddition(additional driver.Additional) {
+	if additional != nil {
+		d.Addition = Addition{}
+		err := additional.UnmarshalData(&d.Addition)
+		if err != nil {
+			panic(err)
+		}
+	}
 }
 
 func (d *AliyundriveOpen) Init(ctx context.Context) error {

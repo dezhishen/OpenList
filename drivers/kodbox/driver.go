@@ -25,7 +25,21 @@ func (d *KodBox) Config() driver.Config {
 }
 
 func (d *KodBox) GetAddition() driver.Additional {
-	return &d.Addition
+	additional, err := driver.NewSimpleAdditional(d.RootPath, d.Addition)
+	if err != nil {
+		panic(err)
+	}
+	return additional
+}
+
+func (d *KodBox) SetAddition(additional driver.Additional) {
+	if additional != nil {
+		d.Addition = Addition{}
+		err := additional.UnmarshalData(&d.Addition)
+		if err != nil {
+			panic(err)
+		}
+	}
 }
 
 func (d *KodBox) Init(ctx context.Context) error {

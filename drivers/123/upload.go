@@ -165,9 +165,6 @@ func (d *Pan123) newUpload(ctx context.Context, upReq *UploadResp, file model.Fi
 							s3PreSignedUrls.Data.PreSignedUrls = newS3PreSignedUrls.Data.PreSignedUrls
 							return nil, nil
 						})
-						if err != nil {
-							return err
-						}
 						return fmt.Errorf("upload s3 chunk %d failed, status code: %d", cur, res.StatusCode)
 					}
 					if res.StatusCode != http.StatusOK {

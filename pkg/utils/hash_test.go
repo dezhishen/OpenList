@@ -2,9 +2,10 @@ package utils
 
 import (
 	"bytes"
+	"testing"
+
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"testing"
 )
 
 type hashTest struct {
@@ -39,14 +40,14 @@ func TestMultiHasher(t *testing.T) {
 		require.NoError(t, err)
 		assert.Len(t, test.input, int(n))
 		hashInfo := mh.GetHashInfo()
-		for k, v := range hashInfo.h {
+		for k, v := range hashInfo.H {
 			expect, ok := test.output[k]
 			require.True(t, ok, "test output for hash not found")
 			assert.Equal(t, expect, v)
 		}
 		// Test that all are present
 		for k, v := range test.output {
-			expect, ok := hashInfo.h[k]
+			expect, ok := hashInfo.H[k]
 			require.True(t, ok, "test output for hash not found")
 			assert.Equal(t, expect, v)
 		}
@@ -60,7 +61,7 @@ func TestMultiHasher(t *testing.T) {
 		str := hashInfo.String()
 		Log.Info("str=" + str)
 		newHi := FromString(str)
-		assert.Equal(t, newHi.h, hashInfo.h)
+		assert.Equal(t, newHi.H, hashInfo.H)
 
 	}
 }

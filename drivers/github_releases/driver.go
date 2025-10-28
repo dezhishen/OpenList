@@ -24,7 +24,21 @@ func (d *GithubReleases) Config() driver.Config {
 }
 
 func (d *GithubReleases) GetAddition() driver.Additional {
-	return &d.Addition
+	additional, err := driver.NewSimpleAdditional(d.RootID, d.Addition)
+	if err != nil {
+		panic(err)
+	}
+	return additional
+}
+
+func (d *GithubReleases) SetAddition(additional driver.Additional) {
+	if additional != nil {
+		d.Addition = Addition{}
+		err := additional.UnmarshalData(&d.Addition)
+		if err != nil {
+			panic(err)
+		}
+	}
 }
 
 func (d *GithubReleases) Init(ctx context.Context) error {

@@ -130,7 +130,16 @@ func (d *Local) Drop(ctx context.Context) error {
 }
 
 func (d *Local) GetAddition() driver.Additional {
-	return &d.Addition
+	additional, err := driver.NewSimpleAdditional(d.RootPath, d.Addition)
+	if err != nil {
+		panic(err)
+	}
+	return additional
+}
+
+func (d *Local) SetAddition(additional driver.Additional) {
+	d.Addition = Addition{}
+	additional.UnmarshalData(&d.Addition)
 }
 
 func (d *Local) List(ctx context.Context, dir model.Obj, args model.ListArgs) ([]model.Obj, error) {

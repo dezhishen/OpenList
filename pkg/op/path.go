@@ -24,8 +24,10 @@ func GetStorageAndActualPath(rawPath string) (storage driver.Driver, actualPath 
 		err = errs.NewErr(errs.StorageNotFound, "rawPath: %s", rawPath)
 		return
 	}
-	log.Debugln("use storage: ", storage.GetStorage().MountPath)
-	mountPath := utils.GetActualMountPath(storage.GetStorage().MountPath)
+	_storage := storage.GetStorage()
+	log.Debugln("found storage for path:", rawPath, "->", _storage.MountPath)
+	log.Debugln("use storage: ", _storage.MountPath)
+	mountPath := utils.GetActualMountPath(_storage.MountPath)
 	actualPath = utils.FixAndCleanPath(strings.TrimPrefix(rawPath, mountPath))
 	return
 }

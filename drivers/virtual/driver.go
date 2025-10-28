@@ -28,7 +28,21 @@ func (d *Virtual) Drop(ctx context.Context) error {
 }
 
 func (d *Virtual) GetAddition() driver.Additional {
-	return &d.Addition
+	additional, err := driver.NewSimpleAdditional(d.RootPath, d.Addition)
+	if err != nil {
+		panic(err)
+	}
+	return additional
+}
+
+func (d *Virtual) SetAddition(additional driver.Additional) {
+	if additional != nil {
+		d.Addition = Addition{}
+		err := additional.UnmarshalData(&d.Addition)
+		if err != nil {
+			panic(err)
+		}
+	}
 }
 
 func (d *Virtual) List(ctx context.Context, dir model.Obj, args model.ListArgs) ([]model.Obj, error) {

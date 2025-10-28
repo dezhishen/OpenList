@@ -35,7 +35,21 @@ func (y *Cloud189TV) Config() driver.Config {
 }
 
 func (y *Cloud189TV) GetAddition() driver.Additional {
-	return &y.Addition
+	additional, err := driver.NewSimpleAdditional(y.RootID, y.Addition)
+	if err != nil {
+		panic(err)
+	}
+	return additional
+}
+
+func (y *Cloud189TV) SetAddition(additional driver.Additional) {
+	if additional != nil {
+		y.Addition = Addition{}
+		err := additional.UnmarshalData(&y.Addition)
+		if err != nil {
+			panic(err)
+		}
+	}
 }
 
 func (y *Cloud189TV) Init(ctx context.Context) (err error) {

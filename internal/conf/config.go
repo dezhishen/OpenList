@@ -144,7 +144,7 @@ func DefaultConfig(dataDir string) *Config {
 	dbPath := filepath.Join(dataDir, "data.db")
 	return &Config{
 		Plugin: PluginConfig{
-			Path: "./plugins",
+			Path: "data/plugins",
 		},
 		Scheme: Scheme{
 			Address:    "0.0.0.0",

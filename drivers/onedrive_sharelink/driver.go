@@ -24,7 +24,21 @@ func (d *OnedriveSharelink) Config() driver.Config {
 }
 
 func (d *OnedriveSharelink) GetAddition() driver.Additional {
-	return &d.Addition
+	additional, err := driver.NewSimpleAdditional(d.RootPath, d.Addition)
+	if err != nil {
+		panic(err)
+	}
+	return additional
+}
+
+func (d *OnedriveSharelink) SetAddition(additional driver.Additional) {
+	if additional != nil {
+		d.Addition = Addition{}
+		err := additional.UnmarshalData(&d.Addition)
+		if err != nil {
+			panic(err)
+		}
+	}
 }
 
 func (d *OnedriveSharelink) Init(ctx context.Context) error {

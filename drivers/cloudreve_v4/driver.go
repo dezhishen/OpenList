@@ -36,7 +36,21 @@ func (d *CloudreveV4) Config() driver.Config {
 }
 
 func (d *CloudreveV4) GetAddition() driver.Additional {
-	return &d.Addition
+	additional, err := driver.NewSimpleAdditional(d.RootPath, d.Addition)
+	if err != nil {
+		panic(err)
+	}
+	return additional
+}
+
+func (d *CloudreveV4) SetAddition(additional driver.Additional) {
+	if additional != nil {
+		d.Addition = Addition{}
+		err := additional.UnmarshalData(&d.Addition)
+		if err != nil {
+			panic(err)
+		}
+	}
 }
 
 func (d *CloudreveV4) Init(ctx context.Context) error {

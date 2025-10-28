@@ -168,9 +168,7 @@ func (d *Yun139) requestRoute(data interface{}, resp interface{}) ([]byte, error
 	callback := func(req *resty.Request) {
 		req.SetBody(data)
 	}
-	if callback != nil {
-		callback(req)
-	}
+	callback(req)
 	body, err := utils.Json.Marshal(req.Body)
 	if err != nil {
 		return nil, err

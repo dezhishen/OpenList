@@ -30,7 +30,21 @@ func (d *QuarkOrUC) Config() driver.Config {
 }
 
 func (d *QuarkOrUC) GetAddition() driver.Additional {
-	return &d.Addition
+	additional, err := driver.NewSimpleAdditional(d.RootID, d.Addition)
+	if err != nil {
+		panic(err)
+	}
+	return additional
+}
+
+func (d *QuarkOrUC) SetAddition(additional driver.Additional) {
+	if additional != nil {
+		d.Addition = Addition{}
+		err := additional.UnmarshalData(&d.Addition)
+		if err != nil {
+			panic(err)
+		}
+	}
 }
 
 func (d *QuarkOrUC) Init(ctx context.Context) error {

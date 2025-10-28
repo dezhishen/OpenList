@@ -35,7 +35,21 @@ func (d *MoPan) Config() driver.Config {
 }
 
 func (d *MoPan) GetAddition() driver.Additional {
-	return &d.Addition
+	additional, err := driver.NewSimpleAdditionalWithoutRoot(d.Addition)
+	if err != nil {
+		panic(err)
+	}
+	return additional
+}
+
+func (d *MoPan) SetAddition(additional driver.Additional) {
+	if additional != nil {
+		d.Addition = Addition{}
+		err := additional.UnmarshalData(&d.Addition)
+		if err != nil {
+			panic(err)
+		}
+	}
 }
 
 func (d *MoPan) Init(ctx context.Context) error {

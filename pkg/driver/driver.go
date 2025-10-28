@@ -19,7 +19,9 @@ type Meta interface {
 	GetStorage() *model.Storage
 	SetStorage(model.Storage)
 	// GetAddition Additional is used for unmarshal of JSON, so need return pointer
+	// return type changed to any to avoid requiring generic instantiation here
 	GetAddition() Additional
+	SetAddition(additional Additional)
 	// Init If already initialized, drop first
 	Init(ctx context.Context) error
 	Drop(ctx context.Context) error

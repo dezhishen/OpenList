@@ -107,7 +107,9 @@ func initStorage(ctx context.Context, storage model.Storage, storageDriver drive
 		}
 	}()
 	// Unmarshal Addition
-	err = utils.Json.UnmarshalFromString(driverStorage.Addition, storageDriver.GetAddition())
+	var simpleAdditional driver.SimpleAdditional
+	err = utils.Json.UnmarshalFromString(driverStorage.Addition, &simpleAdditional)
+	storageDriver.SetAddition(&simpleAdditional)
 	if err == nil {
 		if ref, ok := storageDriver.(driver.Reference); ok {
 			if strings.HasPrefix(driverStorage.Remark, "ref:/") {

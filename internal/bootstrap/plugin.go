@@ -8,7 +8,7 @@ import (
 func InitPlugin() error {
 	path := conf.Conf.Plugin.Path
 	if path == "" {
-		path = "./plugins"
+		path = "data/plugins"
 	}
 	return plugin.Init(path)
 }

@@ -35,7 +35,21 @@ func (d *AzureBlob) Config() driver.Config {
 
 // GetAddition returns additional settings specific to Azure Blob Storage.
 func (d *AzureBlob) GetAddition() driver.Additional {
-	return &d.Addition
+	additional, err := driver.NewSimpleAdditionalWithoutRoot(d.Addition)
+	if err != nil {
+		panic(err)
+	}
+	return additional
+}
+
+func (d *AzureBlob) SetAddition(additional driver.Additional) {
+	if additional != nil {
+		d.Addition = Addition{}
+		err := additional.UnmarshalData(&d.Addition)
+		if err != nil {
+			panic(err)
+		}
+	}
 }
 
 // Init initializes the Azure Blob Storage client using shared key authentication.

@@ -23,7 +23,20 @@ func (d *Pan115Share) Config() driver.Config {
 }
 
 func (d *Pan115Share) GetAddition() driver.Additional {
-	return &d.Addition
+	additional, err := driver.NewSimpleAdditional(d.RootID, d.Addition)
+	if err != nil {
+		panic(err)
+	}
+	return additional
+}
+func (d *Pan115Share) SetAddition(additional driver.Additional) {
+	if additional != nil {
+		d.Addition = Addition{}
+		err := additional.UnmarshalData(&d.Addition)
+		if err != nil {
+			panic(err)
+		}
+	}
 }
 
 func (d *Pan115Share) Init(ctx context.Context) error {

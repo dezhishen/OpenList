@@ -19,24 +19,38 @@ type YandexDisk struct {
 	AccessToken string
 }
 
-func (d *YandexDisk) Config() driver.Config {
+func (y *YandexDisk) Config() driver.Config {
 	return config
 }
 
-func (d *YandexDisk) GetAddition() driver.Additional {
-	return &d.Addition
+func (y *YandexDisk) GetAddition() driver.Additional {
+	additional, err := driver.NewSimpleAdditional(y.RootPath, y.Addition)
+	if err != nil {
+		panic(err)
+	}
+	return additional
 }
 
-func (d *YandexDisk) Init(ctx context.Context) error {
-	return d.refreshToken()
+func (y *YandexDisk) SetAddition(additional driver.Additional) {
+	if additional != nil {
+		y.Addition = Addition{}
+		err := additional.UnmarshalData(&y.Addition)
+		if err != nil {
+			panic(err)
+		}
+	}
 }
 
-func (d *YandexDisk) Drop(ctx context.Context) error {
+func (y *YandexDisk) Init(ctx context.Context) error {
+	return y.refreshToken()
+}
+
+func (y *YandexDisk) Drop(ctx context.Context) error {
 	return nil
 }
 
-func (d *YandexDisk) List(ctx context.Context, dir model.Obj, args model.ListArgs) ([]model.Obj, error) {
-	files, err := d.getFiles(dir.GetPath())
+func (y *YandexDisk) List(ctx context.Context, dir model.Obj, args model.ListArgs) ([]model.Obj, error) {
+	files, err := y.getFiles(dir.GetPath())
 	if err != nil {
 		return nil, err
 	}
@@ -45,9 +59,9 @@ func (d *YandexDisk) List(ctx context.Context, dir model.Obj, args model.ListArg
 	})
 }
 
-func (d *YandexDisk) Link(ctx context.Context, file model.Obj, args model.LinkArgs) (*model.Link, error) {
+func (y *YandexDisk) Link(ctx context.Context, file model.Obj, args model.LinkArgs) (*model.Link, error) {
 	var resp DownResp
-	_, err := d.request("/download", http.MethodGet, func(req *resty.Request) {
+	_, err := y.request("/download", http.MethodGet, func(req *resty.Request) {
 		req.SetQueryParam("path", file.GetPath())
 	}, &resp)
 	if err != nil {
@@ -59,15 +73,15 @@ func (d *YandexDisk) Link(ctx context.Context, file model.Obj, args model.LinkAr
 	return &link, nil
 }
 
-func (d *YandexDisk) MakeDir(ctx context.Context, parentDir model.Obj, dirName string) error {
-	_, err := d.request("", http.MethodPut, func(req *resty.Request) {
+func (y *YandexDisk) MakeDir(ctx context.Context, parentDir model.Obj, dirName string) error {
+	_, err := y.request("", http.MethodPut, func(req *resty.Request) {
 		req.SetQueryParam("path", path.Join(parentDir.GetPath(), dirName))
 	}, nil)
 	return err
 }
 
-func (d *YandexDisk) Move(ctx context.Context, srcObj, dstDir model.Obj) error {
-	_, err := d.request("/move", http.MethodPost, func(req *resty.Request) {
+func (y *YandexDisk) Move(ctx context.Context, srcObj, dstDir model.Obj) error {
+	_, err := y.request("/move", http.MethodPost, func(req *resty.Request) {
 		req.SetQueryParams(map[string]string{
 			"from":      srcObj.GetPath(),
 			"path":      path.Join(dstDir.GetPath(), srcObj.GetName()),
@@ -77,8 +91,8 @@ func (d *YandexDisk) Move(ctx context.Context, srcObj, dstDir model.Obj) error {
 	return err
 }
 
-func (d *YandexDisk) Rename(ctx context.Context, srcObj model.Obj, newName string) error {
-	_, err := d.request("/move", http.MethodPost, func(req *resty.Request) {
+func (y *YandexDisk) Rename(ctx context.Context, srcObj model.Obj, newName string) error {
+	_, err := y.request("/move", http.MethodPost, func(req *resty.Request) {
 		req.SetQueryParams(map[string]string{
 			"from":      srcObj.GetPath(),
 			"path":      path.Join(path.Dir(srcObj.GetPath()), newName),
@@ -88,8 +102,8 @@ func (d *YandexDisk) Rename(ctx context.Context, srcObj model.Obj, newName strin
 	return err
 }
 
-func (d *YandexDisk) Copy(ctx context.Context, srcObj, dstDir model.Obj) error {
-	_, err := d.request("/copy", http.MethodPost, func(req *resty.Request) {
+func (y *YandexDisk) Copy(ctx context.Context, srcObj, dstDir model.Obj) error {
+	_, err := y.request("/copy", http.MethodPost, func(req *resty.Request) {
 		req.SetQueryParams(map[string]string{
 			"from":      srcObj.GetPath(),
 			"path":      path.Join(dstDir.GetPath(), srcObj.GetName()),
@@ -99,16 +113,16 @@ func (d *YandexDisk) Copy(ctx context.Context, srcObj, dstDir model.Obj) error {
 	return err
 }
 
-func (d *YandexDisk) Remove(ctx context.Context, obj model.Obj) error {
-	_, err := d.request("", http.MethodDelete, func(req *resty.Request) {
+func (y *YandexDisk) Remove(ctx context.Context, obj model.Obj) error {
+	_, err := y.request("", http.MethodDelete, func(req *resty.Request) {
 		req.SetQueryParam("path", obj.GetPath())
 	}, nil)
 	return err
 }
 
-func (d *YandexDisk) Put(ctx context.Context, dstDir model.Obj, s model.FileStreamer, up driver.UpdateProgress) error {
+func (y *YandexDisk) Put(ctx context.Context, dstDir model.Obj, s model.FileStreamer, up driver.UpdateProgress) error {
 	var resp UploadResp
-	_, err := d.request("/upload", http.MethodGet, func(req *resty.Request) {
+	_, err := y.request("/upload", http.MethodGet, func(req *resty.Request) {
 		req.SetQueryParams(map[string]string{
 			"path":      path.Join(dstDir.GetPath(), s.GetName()),
 			"overwrite": "true",

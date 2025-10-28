@@ -36,7 +36,21 @@ func (x *ThunderBrowser) Config() driver.Config {
 }
 
 func (x *ThunderBrowser) GetAddition() driver.Additional {
-	return &x.Addition
+	addition, err := driver.NewSimpleAdditional(x.RootID, x.Addition)
+	if err != nil {
+		panic(err)
+	}
+	return addition
+}
+
+func (x *ThunderBrowser) SetAddition(additional driver.Additional) {
+	if additional != nil {
+		x.Addition = Addition{}
+		err := additional.UnmarshalData(&x.Addition)
+		if err != nil {
+			panic(err)
+		}
+	}
 }
 
 func (x *ThunderBrowser) Init(ctx context.Context) (err error) {
@@ -152,7 +166,21 @@ func (x *ThunderBrowserExpert) Config() driver.Config {
 }
 
 func (x *ThunderBrowserExpert) GetAddition() driver.Additional {
-	return &x.ExpertAddition
+	addition, err := driver.NewSimpleAdditional(x.RootID, x.ExpertAddition)
+	if err != nil {
+		panic(err)
+	}
+	return addition
+}
+
+func (x *ThunderBrowserExpert) SetAddition(additional driver.Additional) {
+	if additional != nil {
+		x.ExpertAddition = ExpertAddition{}
+		err := additional.UnmarshalData(&x.ExpertAddition)
+		if err != nil {
+			panic(err)
+		}
+	}
 }
 
 func (x *ThunderBrowserExpert) Init(ctx context.Context) (err error) {

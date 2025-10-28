@@ -47,7 +47,21 @@ func (y *Cloud189PC) Config() driver.Config {
 }
 
 func (y *Cloud189PC) GetAddition() driver.Additional {
-	return &y.Addition
+	additional, err := driver.NewSimpleAdditional(y.RootID, y.Addition)
+	if err != nil {
+		panic(err)
+	}
+	return additional
+}
+
+func (y *Cloud189PC) SetAddition(additional driver.Additional) {
+	if additional != nil {
+		y.Addition = Addition{}
+		err := additional.UnmarshalData(&y.Addition)
+		if err != nil {
+			panic(err)
+		}
+	}
 }
 
 func (y *Cloud189PC) Init(ctx context.Context) (err error) {
@@ -127,10 +141,10 @@ func (y *Cloud189PC) Init(ctx context.Context) (err error) {
 	return err
 }
 
-func (d *Cloud189PC) InitReference(storage driver.Driver) error {
+func (y *Cloud189PC) InitReference(storage driver.Driver) error {
 	refStorage, ok := storage.(*Cloud189PC)
 	if ok {
-		d.ref = refStorage
+		y.ref = refStorage
 		return nil
 	}
 	return errs.NotSupport

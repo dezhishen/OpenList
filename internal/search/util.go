@@ -46,7 +46,8 @@ func updateIgnorePaths(customIgnorePaths string) {
 	for _, storage := range storages {
 		if utils.SliceContains(skipDrivers, storage.Config().Name) {
 			if storage.Config().Name == "OpenList" {
-				addition := storage.GetAddition().(*openlist.Addition)
+				var addition openlist.Addition
+				storage.GetAddition().UnmarshalData(&addition)
 				allowIndexed, visited := v3Visited[addition.Address]
 				if !visited {
 					url := addition.Address + "/api/public/settings"

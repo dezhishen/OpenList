@@ -21,6 +21,8 @@ type RPCDriverClient struct {
 	client *rpc.Client
 }
 
+var _ driver.Driver = (*RPCDriverClient)(nil)
+
 // RPCDriverPlugin implements plugin.Plugin so we can serve/consume Drivers with hashicorp/go-plugin.
 type RPCDriverPlugin struct {
 	Impl driver.Driver
@@ -73,20 +75,14 @@ func (c *RPCDriverClient) GetStorage() *model.Storage {
 	return &resp
 }
 
-// SetStorage
-type setStorageArgs struct {
-	Storage model.Storage
-}
-
-func (s *RPCDriverServer) SetStorage(args setStorageArgs, resp *struct{}) error {
-	s.Impl.SetStorage(args.Storage)
+func (s *RPCDriverServer) SetStorage(storage model.Storage, resp *struct{}) error {
+	s.Impl.SetStorage(storage)
 	return nil
 }
 
 func (c *RPCDriverClient) SetStorage(s model.Storage) {
-	_args := setStorageArgs{Storage: s}
 	var resp struct{}
-	if err := c.client.Call("Plugin.SetStorage", _args, &resp); err != nil {
+	if err := c.client.Call("Plugin.SetStorage", s, &resp); err != nil {
 		panic(err)
 	}
 }
@@ -103,6 +99,19 @@ func (c *RPCDriverClient) GetAddition() driver.Additional {
 		panic(err)
 	}
 	return resp
+}
+
+// SetAddition
+func (s *RPCDriverServer) SetAddition(additional driver.Additional, resp *struct{}) error {
+	s.Impl.SetAddition(additional)
+	return nil
+}
+
+func (c *RPCDriverClient) SetAddition(additional driver.Additional) {
+	var resp struct{}
+	if err := c.client.Call("Plugin.SetAddition", &additional, &resp); err != nil {
+		panic(err)
+	}
 }
 
 // Init
@@ -129,12 +138,12 @@ func (c *RPCDriverClient) Drop(ctx context.Context) error {
 }
 
 // ------------------ Reader ------------------
-type listArgs struct {
-	Dir  model.Obj
-	Opts model.ListArgs
+type ListArgs struct {
+	Dir  model.Obj      `json:"dir"`
+	Opts model.ListArgs `json:"opts"`
 }
 
-func (s *RPCDriverServer) List(args listArgs, resp *[]model.Obj) error {
+func (s *RPCDriverServer) List(args ListArgs, resp *[]model.Obj) error {
 	r, err := s.Impl.List(context.Background(), args.Dir, args.Opts)
 	if err != nil {
 		return err
@@ -143,19 +152,21 @@ func (s *RPCDriverServer) List(args listArgs, resp *[]model.Obj) error {
 	return nil
 }
 
-func (c *RPCDriverClient) List(ctx context.Context, dir model.Obj, args model.ListArgs) ([]model.Obj, error) {
+func (c *RPCDriverClient) List(ctx context.Context, dir model.Obj, opts model.ListArgs) ([]model.Obj, error) {
 	var resp []model.Obj
-	_args := listArgs{Dir: dir, Opts: args}
-	err := c.client.Call("Plugin.List", _args, &resp)
+	err := c.client.Call("Plugin.List", ListArgs{
+		Dir:  dir,
+		Opts: opts,
+	}, &resp)
 	return resp, err
 }
 
-type linkArgs struct {
+type LinkArgs struct {
 	File model.Obj
 	Args model.LinkArgs
 }
 
-func (s *RPCDriverServer) Link(args linkArgs, resp *model.Link) error {
+func (s *RPCDriverServer) Link(args LinkArgs, resp *model.Link) error {
 	r, err := s.Impl.Link(context.Background(), args.File, args.Args)
 	if err != nil {
 		return err
@@ -166,7 +177,7 @@ func (s *RPCDriverServer) Link(args linkArgs, resp *model.Link) error {
 
 func (c *RPCDriverClient) Link(ctx context.Context, file model.Obj, args model.LinkArgs) (*model.Link, error) {
 	var resp model.Link
-	_args := linkArgs{File: file, Args: args}
+	_args := LinkArgs{File: file, Args: args}
 	err := c.client.Call("Plugin.Link", _args, &resp)
 	if err != nil {
 		return nil, err
@@ -190,12 +201,8 @@ func (c *RPCDriverClient) GetRoot(ctx context.Context) (model.Obj, error) {
 	return resp, err
 }
 
-type getArgs struct {
-	Path string
-}
-
-func (s *RPCDriverServer) Get(args getArgs, resp *model.Obj) error {
-	r, err := s.Impl.(driver.Getter).Get(context.Background(), args.Path)
+func (s *RPCDriverServer) Get(path string, resp *model.Obj) error {
+	r, err := s.Impl.(driver.Getter).Get(context.Background(), path)
 	if err != nil {
 		return err
 	}
@@ -205,13 +212,12 @@ func (s *RPCDriverServer) Get(args getArgs, resp *model.Obj) error {
 
 func (c *RPCDriverClient) Get(ctx context.Context, path string) (model.Obj, error) {
 	var resp model.Obj
-	_args := getArgs{Path: path}
-	err := c.client.Call("Plugin.Get", _args, &resp)
+	err := c.client.Call("Plugin.Get", path, &resp)
 	return resp, err
 }
 
-func (s *RPCDriverServer) GetObjInfo(args getArgs, resp *model.Obj) error {
-	r, err := s.Impl.(driver.GetObjInfo).GetObjInfo(context.Background(), args.Path)
+func (s *RPCDriverServer) GetObjInfo(path string, resp *model.Obj) error {
+	r, err := s.Impl.(driver.GetObjInfo).GetObjInfo(context.Background(), path)
 	if err != nil {
 		return err
 	}
@@ -221,8 +227,7 @@ func (s *RPCDriverServer) GetObjInfo(args getArgs, resp *model.Obj) error {
 
 func (c *RPCDriverClient) GetObjInfo(ctx context.Context, path string) (model.Obj, error) {
 	var resp model.Obj
-	_args := getArgs{Path: path}
-	err := c.client.Call("Plugin.GetObjInfo", _args, &resp)
+	err := c.client.Call("Plugin.GetObjInfo", path, &resp)
 	return resp, err
 }
 
