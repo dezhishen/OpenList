@@ -23,7 +23,7 @@ func hidePrivacy(msg string) string {
 }
 
 // ErrorResp is used to return error response
-// @param l: if true, log error
+// param l: if true, log error
 func ErrorResp(c *gin.Context, err error, code int, l ...bool) {
 	ErrorWithDataResp(c, err, code, nil, l...)
 	//if len(l) > 0 && l[0] {
@@ -43,7 +43,7 @@ func ErrorResp(c *gin.Context, err error, code int, l ...bool) {
 
 // ErrorPage is used to return error page HTML.
 // It also returns standard HTTP status code.
-// @param l: if true, log error
+// \@param l: if true, log error
 func ErrorPage(c *gin.Context, err error, code int, l ...bool) {
 
 	if len(l) > 0 && l[0] {

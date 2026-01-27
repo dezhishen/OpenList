@@ -16,6 +16,19 @@ type SSHKeyAddReq struct {
 	Key   string `json:"key" binding:"required"`
 }
 
+// AddMyPublicKey add a new SSH public key for current user
+//
+//	@Summary		Add My Public Key
+//	@Description	Add a new SSH public key associated with the current user
+//	@Tags			User
+//	@Accept			json
+//	@Produce		json
+//	@Param			sshkey	body		SSHKeyAddReq					true	"SSH Public Key Data"
+//	@Success		200		{object}	common.jsonResult{data=string}	"Success message"
+//	@Failure		400		{object}	common.jsonResult{data=string}	"Bad Request"
+//	@Failure		401		{object}	common.jsonResult{data=string}	"Unauthorized"
+//	@Failure		500		{object}	common.jsonResult{data=string}	"Internal Server Error"
+//	@Router			/api/me/sshkey/add [post]
 func AddMyPublicKey(c *gin.Context) {
 	userObj, ok := c.Request.Context().Value(conf.UserKey).(*model.User)
 	if !ok || userObj.IsGuest() {
@@ -47,6 +60,15 @@ func AddMyPublicKey(c *gin.Context) {
 	common.SuccessResp(c)
 }
 
+// ListMyPublicKey list current user's public keys
+//
+//	@Summary		List My Public Keys
+//	@Description	List all SSH public keys associated with the current user
+//	@Tags			User
+//	@Produce		json
+//	@Success		200	{object}	common.PageResp{content=[]model.SSHPublicKey,total=int}	"List of user's SSH public keys"
+//	@Failure		401	{object}	common.jsonResult{data=string}							"Unauthorized"
+//	@Router			/api/me/sshkey/list [get]
 func ListMyPublicKey(c *gin.Context) {
 	userObj, ok := c.Request.Context().Value(conf.UserKey).(*model.User)
 	if !ok || userObj.IsGuest() {

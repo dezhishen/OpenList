@@ -10,6 +10,19 @@ import (
 	"github.com/pkg/errors"
 )
 
+// LoginReq represents ldap login request
+//
+//	@Summary		LDAP login
+//	@Description	Authenticate user via LDAP directory service
+//	@Tags			Authentication
+//	@Accept			json
+//	@Produce		json
+//	@Param			login	body		LoginReq												true	"Login info"
+//	@Success		200		{object}	common.jsonResult{data=common.mapResult{token=string}}	"Login successful, return token"
+//	@Failure		400		{object}	common.jsonResult{data=string}							"Bad Request"
+//	@Failure		403		{object}	common.jsonResult{data=string}							"Forbidden"
+//	@Failure		429		{object}	common.jsonResult{data=string}							"Too Many Requests"
+//	@Router			/api/auth/ldap/login [post]
 func LoginLdap(c *gin.Context) {
 	var req LoginReq
 	if err := c.ShouldBind(&req); err != nil {

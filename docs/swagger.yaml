@@ -1,0 +1,562 @@
+definitions:
+  common.PageResp:
+    properties:
+      content: {}
+      total:
+        type: integer
+    type: object
+  common.jsonResult:
+    properties:
+      code:
+        type: integer
+      data: {}
+      message:
+        type: string
+    type: object
+  common.mapResult:
+    type: object
+  handles.LoginReq:
+    properties:
+      otp_code:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - username
+    type: object
+  handles.SSHKeyAddReq:
+    properties:
+      key:
+        type: string
+      title:
+        type: string
+    required:
+    - key
+    - title
+    type: object
+  handles.UserResp:
+    properties:
+      allow_ldap:
+        type: boolean
+      base_path:
+        description: base path
+        type: string
+      disabled:
+        type: boolean
+      id:
+        description: unique key
+        type: integer
+      otp:
+        type: boolean
+      password:
+        description: password
+        type: string
+      permission:
+        description: |-
+          Determine permissions by bit
+            0:  can see hidden files
+            1:  can access without password
+            2:  can add offline download tasks
+            3:  can mkdir and upload
+            4:  can rename
+            5:  can move
+            6:  can copy
+            7:  can remove
+            8:  webdav read
+            9:  webdav write
+            10: ftp/sftp login and read
+            11: ftp/sftp write
+            12: can read archives
+            13: can decompress archives
+            14: can share
+        type: integer
+      role:
+        description: user's role
+        type: integer
+      sso_id:
+        description: unique by sso platform
+        type: string
+      username:
+        description: username
+        type: string
+    required:
+    - username
+    type: object
+  model.SSHPublicKey:
+    properties:
+      added_time:
+        type: string
+      fingerprint:
+        type: string
+      id:
+        type: integer
+      last_used_time:
+        type: string
+      title:
+        type: string
+    type: object
+  model.User:
+    properties:
+      allow_ldap:
+        type: boolean
+      base_path:
+        description: base path
+        type: string
+      disabled:
+        type: boolean
+      id:
+        description: unique key
+        type: integer
+      password:
+        description: password
+        type: string
+      permission:
+        description: |-
+          Determine permissions by bit
+            0:  can see hidden files
+            1:  can access without password
+            2:  can add offline download tasks
+            3:  can mkdir and upload
+            4:  can rename
+            5:  can move
+            6:  can copy
+            7:  can remove
+            8:  webdav read
+            9:  webdav write
+            10: ftp/sftp login and read
+            11: ftp/sftp write
+            12: can read archives
+            13: can decompress archives
+            14: can share
+        type: integer
+      role:
+        description: user's role
+        type: integer
+      sso_id:
+        description: unique by sso platform
+        type: string
+      username:
+        description: username
+        type: string
+    required:
+    - username
+    type: object
+info:
+  contact: {}
+  description: A file list program that supports multiple storage.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: https://doc.oplist.org/terms
+  title: OpenList
+  version: latest
+paths:
+  /api/auth/2fa/generate:
+    post:
+      description: Generate a new 2FA (TOTP) secret for current user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Generated QR code and secret
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  allOf:
+                  - $ref: '#/definitions/common.mapResult'
+                  - properties:
+                      qr:
+                        type: string
+                      secret:
+                        type: string
+                    type: object
+              type: object
+        "403":
+          description: Forbidden
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Generate 2FA secret
+      tags:
+      - Authentication
+  /api/auth/ldap/login:
+    post:
+      consumes:
+      - application/json
+      description: Authenticate user via LDAP directory service
+      parameters:
+      - description: Login info
+        in: body
+        name: login
+        required: true
+        schema:
+          $ref: '#/definitions/handles.LoginReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Login successful, return token
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  allOf:
+                  - $ref: '#/definitions/common.mapResult'
+                  - properties:
+                      token:
+                        type: string
+                    type: object
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "403":
+          description: Forbidden
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "429":
+          description: Too Many Requests
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: LDAP login
+      tags:
+      - Authentication
+  /api/auth/login:
+    post:
+      consumes:
+      - application/json
+      deprecated: true
+      description: User login with username and password. Deprecated, use /api/auth/login/hash
+        instead.
+      parameters:
+      - description: Login request
+        in: body
+        name: login
+        required: true
+        schema:
+          $ref: '#/definitions/handles.LoginReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Login successful, returns token
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  allOf:
+                  - $ref: '#/definitions/common.mapResult'
+                  - properties:
+                      token:
+                        type: string
+                    type: object
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "402":
+          description: 2FA Required
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "429":
+          description: Too Many Requests
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: User Login Deprecated
+      tags:
+      - Authentication
+  /api/auth/login/hash:
+    post:
+      consumes:
+      - application/json
+      description: Authenticate using username and pre-hashed password (SHA256)
+      parameters:
+      - description: Login request
+        in: body
+        name: login
+        required: true
+        schema:
+          $ref: '#/definitions/handles.LoginReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Login successful, returns token
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  allOf:
+                  - $ref: '#/definitions/common.mapResult'
+                  - properties:
+                      token:
+                        type: string
+                    type: object
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "402":
+          description: 2FA Required
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "429":
+          description: Too Many Requests
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: User login with pre-hashed password
+      tags:
+      - Authentication
+  /api/auth/logout:
+    get:
+      description: Invalidate current session token
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Logout successful
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: User Logout
+      tags:
+      - Authentication
+  /api/me:
+    get:
+      description: Get current user information by token. If token is empty, returns
+        guest user.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Current user information
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/handles.UserResp'
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Get Current User
+      tags:
+      - User
+    post:
+      consumes:
+      - application/json
+      description: Update current user profile information
+      parameters:
+      - description: User profile to update
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/model.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Update successful
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "403":
+          description: Forbidden
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Update Current User
+      tags:
+      - User
+  /api/me/sshkey/add:
+    post:
+      consumes:
+      - application/json
+      description: Add a new SSH public key associated with the current user
+      parameters:
+      - description: SSH Public Key Data
+        in: body
+        name: sshkey
+        required: true
+        schema:
+          $ref: '#/definitions/handles.SSHKeyAddReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success message
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Add My Public Key
+      tags:
+      - User
+  /api/me/sshkey/list:
+    get:
+      description: List all SSH public keys associated with the current user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of user's SSH public keys
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.PageResp'
+            - properties:
+                content:
+                  items:
+                    $ref: '#/definitions/model.SSHPublicKey'
+                  type: array
+                total:
+                  type: integer
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: List My Public Keys
+      tags:
+      - User
+swagger: "2.0"

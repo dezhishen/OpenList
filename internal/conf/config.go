@@ -105,7 +105,9 @@ type SFTP struct {
 	Enable bool   `json:"enable" env:"ENABLE"`
 	Listen string `json:"listen" env:"LISTEN"`
 }
-
+type Document struct {
+	Enable bool `json:"enable" env:"ENABLE"`
+}
 type Config struct {
 	Force                 bool        `json:"force" env:"FORCE"`
 	SiteURL               string      `json:"site_url" env:"SITE_URL"`
@@ -132,6 +134,7 @@ type Config struct {
 	SFTP                  SFTP        `json:"sftp" envPrefix:"SFTP_"`
 	LastLaunchedVersion   string      `json:"last_launched_version"`
 	ProxyAddress          string      `json:"proxy_address" env:"PROXY_ADDRESS"`
+	Doc                   Document    `json:"doc" envPrefix:"DOC_"`
 }
 
 func DefaultConfig(dataDir string) *Config {
@@ -246,5 +249,8 @@ func DefaultConfig(dataDir string) *Config {
 		},
 		LastLaunchedVersion: "",
 		ProxyAddress:        "",
+		Doc: Document{
+			Enable: false,
+		},
 	}
 }

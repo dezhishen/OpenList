@@ -20,6 +20,18 @@ type LoginReq struct {
 }
 
 // Login Deprecated
+//
+//	@Summary			User Login Deprecated
+//	@Description		User login with username and password. Deprecated, use /api/auth/login/hash instead.
+//	@Tags				Authentication
+//	@Accept				json
+//	@Produce			json
+//	@Param				login	body		LoginReq												true	"Login request"
+//	@Success			200		{object}	common.jsonResult{data=common.mapResult{token=string}}	"Login successful, returns token"
+//	@Failure			400		{object}	common.jsonResult{data=string}							"Bad Request"
+//	@Failure			402		{object}	common.jsonResult{data=string}							"2FA Required"
+//	@Failure			429		{object}	common.jsonResult{data=string}							"Too Many Requests"
+//	@deprecatedRouter	/api/auth/login [post]
 func Login(c *gin.Context) {
 	var req LoginReq
 	if err := c.ShouldBind(&req); err != nil {
@@ -31,6 +43,18 @@ func Login(c *gin.Context) {
 }
 
 // LoginHash login with password hashed by sha256
+//
+//	@Summary		User login with pre-hashed password
+//	@Description	Authenticate using username and pre-hashed password (SHA256)
+//	@Tags			Authentication
+//	@Accept			json
+//	@Produce		json
+//	@Param			login	body		LoginReq												true	"Login request"
+//	@Success		200		{object}	common.jsonResult{data=common.mapResult{token=string}}	"Login successful, returns token"
+//	@Failure		400		{object}	common.jsonResult{data=string}							"Bad Request"
+//	@Failure		402		{object}	common.jsonResult{data=string}							"2FA Required"
+//	@Failure		429		{object}	common.jsonResult{data=string}							"Too Many Requests"
+//	@Router			/api/auth/login/hash [post]
 func LoginHash(c *gin.Context) {
 	var req LoginReq
 	if err := c.ShouldBind(&req); err != nil {
@@ -87,6 +111,14 @@ type UserResp struct {
 
 // CurrentUser get current user by token
 // if token is empty, return guest user
+//
+//	@Summary		Get Current User
+//	@Description	Get current user information by token. If token is empty, returns guest user.
+//	@Tags			User
+//	@Produce		json
+//	@Success		200	{object}	common.jsonResult{data=UserResp}	"Current user information"
+//	@Failure		401	{object}	common.jsonResult{data=string}		"Unauthorized"
+//	@Router			/api/me [get]
 func CurrentUser(c *gin.Context) {
 	user := c.Request.Context().Value(conf.UserKey).(*model.User)
 	userResp := UserResp{
@@ -99,6 +131,18 @@ func CurrentUser(c *gin.Context) {
 	common.SuccessResp(c, userResp)
 }
 
+// UpdateCurrent update current user profile
+//
+//	@Summary		Update Current User
+//	@Description	Update current user profile information
+//	@Tags			User
+//	@Accept			json
+//	@Produce		json
+//	@Param			user	body		model.User						true	"User profile to update"
+//	@Success		200		{object}	common.jsonResult{data=string}	"Update successful"
+//	@Failure		400		{object}	common.jsonResult{data=string}	"Bad Request"
+//	@Failure		403		{object}	common.jsonResult{data=string}	"Forbidden"
+//	@Router			/api/me [post]
 func UpdateCurrent(c *gin.Context) {
 	var req model.User
 	if err := c.ShouldBind(&req); err != nil {
@@ -122,6 +166,16 @@ func UpdateCurrent(c *gin.Context) {
 	}
 }
 
+// Generate2FA generate 2FA secret
+//
+//	@Summary		Generate 2FA secret
+//	@Description	Generate a new 2FA (TOTP) secret for current user
+//	@Tags			Authentication
+//	@Produce		json
+//	@Success		200	{object}	common.jsonResult{data=common.mapResult{qr=string,secret=string}}	"Generated QR code and secret"
+//	@Failure		403	{object}	common.jsonResult{data=string}										"Forbidden"
+//	@Failure		500	{object}	common.jsonResult{data=string}										"Internal Server Error"
+//	@Router			/api/auth/2fa/generate [post]
 func Generate2FA(c *gin.Context) {
 	user := c.Request.Context().Value(conf.UserKey).(*model.User)
 	if user.IsGuest() {
@@ -179,6 +233,15 @@ func Verify2FA(c *gin.Context) {
 	}
 }
 
+// LogOut invalidate the token
+//
+//	@Summary		User Logout
+//	@Description	Invalidate current session token
+//	@Tags			Authentication
+//	@Produce		json
+//	@Success		200	{object}	common.jsonResult{data=string}	"Logout successful"
+//	@Failure		500	{object}	common.jsonResult{data=string}	"Internal Server Error"
+//	@Router			/api/auth/logout [get]
 func LogOut(c *gin.Context) {
 	err := common.InvalidateToken(c.GetHeader("Authorization"))
 	if err != nil {
