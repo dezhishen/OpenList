@@ -144,14 +144,16 @@ definitions:
     - username
     type: object
 info:
-  contact: {}
+  contact:
+    name: OpenList Team
+    url: https://t.me/OpenListTeam
   description: A file list program that supports multiple storage.
   license:
-    name: Apache 2.0
-    url: http://www.apache.org/licenses/LICENSE-2.0.html
+    name: GNU Affero General Public License v3.0
+    url: https://www.gnu.org/licenses/agpl-3.0.en.html
   termsOfService: https://doc.oplist.org/terms
   title: OpenList
-  version: latest
+  version: la
 paths:
   /api/auth/2fa/generate:
     post:

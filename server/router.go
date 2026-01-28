@@ -2,7 +2,7 @@ package server
 
 import (
 	"github.com/OpenListTeam/OpenList/v4/cmd/flags"
-	docs "github.com/OpenListTeam/OpenList/v4/docs"
+	"github.com/OpenListTeam/OpenList/v4/docs"
 	"github.com/OpenListTeam/OpenList/v4/internal/conf"
 	"github.com/OpenListTeam/OpenList/v4/internal/message"
 	"github.com/OpenListTeam/OpenList/v4/internal/sign"
@@ -14,19 +14,7 @@ import (
 	"github.com/OpenListTeam/OpenList/v4/server/static"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	swaggerFiles "github.com/swaggo/files"
-	ginSwagger "github.com/swaggo/gin-swagger"
 )
-
-func InitDoc(g *gin.RouterGroup) {
-	if conf.Conf.Doc.Enable == false {
-		return
-	}
-	docs.SwaggerInfo.Version = conf.Conf.LastLaunchedVersion
-	docs.SwaggerInfo.BasePath = conf.URL.Path
-	g.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-
-}
 
 func Init(e *gin.Engine) {
 	e.ContextWithFallback = true
@@ -40,13 +28,13 @@ func Init(e *gin.Engine) {
 	if conf.Conf.Scheme.HttpPort != -1 && conf.Conf.Scheme.HttpsPort != -1 && conf.Conf.Scheme.ForceHttps {
 		e.Use(middlewares.ForceHttps)
 	}
-	InitDoc(g)
 	g.Any("/ping", func(c *gin.Context) {
 		c.String(200, "pong")
 	})
 	g.GET("/favicon.ico", handles.Favicon)
 	g.GET("/robots.txt", handles.Robots)
 	g.GET("/manifest.json", static.ManifestJSON)
+	docs.InitDoc(g.Group("/swagger"))
 	g.GET("/i/:link_name", handles.Plist)
 	common.SecretKey = []byte(conf.Conf.JwtSecret)
 	g.Use(middlewares.StoragesLoaded)
