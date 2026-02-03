@@ -25,6 +25,19 @@ type SearchResp struct {
 	Type int `json:"type"`
 }
 
+// Search perform search operation
+//
+//	@Summary		Search Files and Folders
+//	@Description	Search files and folders within the user's accessible scope
+//	@Tags			Filesystem
+//	@Accept			json
+//	@Produce		json
+//	@Param			search	body		SearchReq										true	"Search request"
+//	@Success		200		{object}	common.PageResp{content=[]SearchResp,total=int}	"Search results with pagination"
+//	@Failure		400		{object}	common.jsonResult{data=string}					"Bad Request"
+//	@Failure		500		{object}	common.jsonResult{data=string}					"Internal Server Error"
+//	@Router			/api/fs/search [post]
+//	@Security		Authorization
 func Search(c *gin.Context) {
 	var (
 		req SearchReq

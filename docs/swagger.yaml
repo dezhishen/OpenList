@@ -1,3 +1,4 @@
+basePath: /
 definitions:
   common.PageResp:
     properties:
@@ -13,7 +14,113 @@ definitions:
       message:
         type: string
     type: object
-  common.mapResult:
+  driver.Config:
+    properties:
+      alert:
+        description: info,success,warning,danger
+        type: string
+      default_root:
+        type: string
+      local_sort:
+        type: boolean
+      name:
+        type: string
+      need_ms:
+        description: if need get message from user, such as validate code
+        type: boolean
+      no_cache:
+        type: boolean
+      no_upload:
+        type: boolean
+      only_indices:
+        description: if the driver only store indices of files (e.g. UrlTree)
+        type: boolean
+      only_proxy:
+        type: boolean
+      prefer_proxy:
+        description: prefer proxy download even if direct link is available
+        type: boolean
+    type: object
+  driver.Info:
+    properties:
+      additional:
+        items:
+          $ref: '#/definitions/driver.Item'
+        type: array
+      common:
+        items:
+          $ref: '#/definitions/driver.Item'
+        type: array
+      config:
+        $ref: '#/definitions/driver.Config'
+    type: object
+  driver.Item:
+    properties:
+      default:
+        type: string
+      help:
+        type: string
+      name:
+        type: string
+      options:
+        type: string
+      required:
+        type: boolean
+      type:
+        type: string
+    type: object
+  handles.AddOfflineDownloadReq:
+    properties:
+      delete_policy:
+        type: string
+      path:
+        type: string
+      tool:
+        type: string
+      urls:
+        items:
+          type: string
+        type: array
+    type: object
+  handles.BatchRenameReq:
+    properties:
+      rename_objects:
+        items:
+          properties:
+            new_name:
+              type: string
+            src_name:
+              type: string
+          type: object
+        type: array
+      src_dir:
+        type: string
+    type: object
+  handles.DirReq:
+    properties:
+      force_root:
+        type: boolean
+      password:
+        type: string
+      path:
+        type: string
+    type: object
+  handles.DirResp:
+    properties:
+      modified:
+        type: string
+      name:
+        type: string
+    type: object
+  handles.FsOtherReq:
+    properties:
+      data: {}
+      method:
+        type: string
+      password:
+        type: string
+      path:
+        type: string
     type: object
   handles.LoginReq:
     properties:
@@ -26,6 +133,83 @@ definitions:
     required:
     - username
     type: object
+  handles.ManualScanReq:
+    properties:
+      limit:
+        type: number
+      path:
+        type: string
+    type: object
+  handles.ManualScanResp:
+    properties:
+      is_done:
+        type: boolean
+      obj_count:
+        type: integer
+    type: object
+  handles.MkdirOrLinkReq:
+    properties:
+      path:
+        type: string
+    type: object
+  handles.MoveCopyReq:
+    properties:
+      dst_dir:
+        type: string
+      merge:
+        type: boolean
+      names:
+        items:
+          type: string
+        type: array
+      overwrite:
+        type: boolean
+      skip_existing:
+        type: boolean
+      src_dir:
+        type: string
+    type: object
+  handles.RecursiveMoveReq:
+    properties:
+      conflict_policy:
+        type: string
+      dst_dir:
+        type: string
+      src_dir:
+        type: string
+    type: object
+  handles.RegexRenameReq:
+    properties:
+      new_name_regex:
+        type: string
+      src_dir:
+        type: string
+      src_name_regex:
+        type: string
+    type: object
+  handles.RemoveEmptyDirectoryReq:
+    properties:
+      src_dir:
+        type: string
+    type: object
+  handles.RemoveReq:
+    properties:
+      dir:
+        type: string
+      names:
+        items:
+          type: string
+        type: array
+    type: object
+  handles.RenameReq:
+    properties:
+      name:
+        type: string
+      overwrite:
+        type: boolean
+      path:
+        type: string
+    type: object
   handles.SSHKeyAddReq:
     properties:
       key:
@@ -35,6 +219,189 @@ definitions:
     required:
     - key
     - title
+    type: object
+  handles.SearchReq:
+    properties:
+      keywords:
+        type: string
+      page:
+        type: integer
+      parent:
+        type: string
+      password:
+        type: string
+      per_page:
+        type: integer
+      scope:
+        description: 0 for all, 1 for dir, 2 for file
+        type: integer
+    type: object
+  handles.SearchResp:
+    properties:
+      is_dir:
+        type: boolean
+      name:
+        type: string
+      parent:
+        type: string
+      size:
+        type: integer
+      type:
+        type: integer
+    type: object
+  handles.Set115OpenReq:
+    properties:
+      temp_dir:
+        type: string
+    type: object
+  handles.Set115Req:
+    properties:
+      temp_dir:
+        type: string
+    type: object
+  handles.Set123OpenReq:
+    properties:
+      callback_url:
+        type: string
+      temp_dir:
+        type: string
+    type: object
+  handles.Set123PanReq:
+    properties:
+      temp_dir:
+        type: string
+    type: object
+  handles.SetAria2Req:
+    properties:
+      secret:
+        type: string
+      uri:
+        type: string
+    type: object
+  handles.SetPikPakReq:
+    properties:
+      temp_dir:
+        type: string
+    type: object
+  handles.SetQbittorrentReq:
+    properties:
+      seedtime:
+        type: string
+      url:
+        type: string
+    type: object
+  handles.SetThunderBrowserReq:
+    properties:
+      temp_dir:
+        type: string
+    type: object
+  handles.SetThunderReq:
+    properties:
+      temp_dir:
+        type: string
+    type: object
+  handles.SetThunderXReq:
+    properties:
+      temp_dir:
+        type: string
+    type: object
+  handles.SetTransmissionReq:
+    properties:
+      seedtime:
+        type: string
+      uri:
+        type: string
+    type: object
+  handles.StorageResp:
+    properties:
+      addition:
+        description: Additional information, defined in the corresponding driver
+        type: string
+      cache_expiration:
+        description: cache expire time
+        type: integer
+      custom_cache_policies:
+        type: string
+      disable_index:
+        type: boolean
+      disable_proxy_sign:
+        description: Disable sign for DownProxyURL
+        type: boolean
+      disabled:
+        description: if disabled
+        type: boolean
+      down_proxy_url:
+        type: string
+      driver:
+        description: driver used
+        type: string
+      enable_sign:
+        type: boolean
+      extract_folder:
+        type: string
+      id:
+        description: unique key
+        type: integer
+      modified:
+        type: string
+      mount_details:
+        $ref: '#/definitions/model.StorageDetails'
+      mount_path:
+        description: must be standardized
+        type: string
+      order:
+        description: use to sort
+        type: integer
+      order_by:
+        type: string
+      order_direction:
+        type: string
+      proxy_range:
+        type: boolean
+      remark:
+        type: string
+      status:
+        type: string
+      web_proxy:
+        type: boolean
+      webdav_policy:
+        type: string
+    required:
+    - mount_path
+    type: object
+  handles.TaskInfo:
+    properties:
+      creator:
+        type: string
+      creator_role:
+        type: integer
+      end_time:
+        type: string
+      error:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      progress:
+        type: number
+      start_time:
+        type: string
+      state:
+        $ref: '#/definitions/tache.State'
+      status:
+        type: string
+      total_bytes:
+        type: integer
+    type: object
+  handles.UpdateIndexReq:
+    properties:
+      max_depth:
+        type: integer
+      paths:
+        items:
+          type: string
+        type: array
     type: object
   handles.UserResp:
     properties:
@@ -84,6 +451,95 @@ definitions:
     required:
     - username
     type: object
+  handles.Verify2FAReq:
+    properties:
+      code:
+        type: string
+      secret:
+        type: string
+    required:
+    - code
+    - secret
+    type: object
+  http.Header:
+    additionalProperties:
+      items:
+        type: string
+      type: array
+    type: object
+  message.Message:
+    properties:
+      content: {}
+      type:
+        type: string
+    type: object
+  message.Req:
+    properties:
+      message:
+        type: string
+    type: object
+  model.IndexProgress:
+    properties:
+      error:
+        type: string
+      is_done:
+        type: boolean
+      last_done_time:
+        type: string
+      obj_count:
+        type: integer
+    type: object
+  model.Link:
+    properties:
+      concurrency:
+        description: for accelerating request, use multi-thread downloading
+        type: integer
+      content_length:
+        description: 转码视频、缩略图
+        type: integer
+      expiration:
+        allOf:
+        - $ref: '#/definitions/time.Duration'
+        description: local cache expire Duration
+      header:
+        allOf:
+        - $ref: '#/definitions/http.Header'
+        description: needed header (for url)
+      part_size:
+        type: integer
+      url:
+        description: most common way
+        type: string
+    type: object
+  model.Meta:
+    properties:
+      h_sub:
+        type: boolean
+      header:
+        type: string
+      header_sub:
+        type: boolean
+      hide:
+        type: string
+      id:
+        type: integer
+      p_sub:
+        type: boolean
+      password:
+        type: string
+      path:
+        type: string
+      r_sub:
+        type: boolean
+      readme:
+        type: string
+      w_sub:
+        type: boolean
+      write:
+        type: boolean
+    required:
+    - path
+    type: object
   model.SSHPublicKey:
     properties:
       added_time:
@@ -96,6 +552,98 @@ definitions:
         type: string
       title:
         type: string
+    type: object
+  model.SettingItem:
+    properties:
+      flag:
+        description: 0 = public, 1 = private, 2 = readonly, 3 = deprecated, etc.
+        type: integer
+      group:
+        description: use to group setting in frontend
+        type: integer
+      help:
+        description: help message
+        type: string
+      index:
+        type: integer
+      key:
+        description: unique key
+        type: string
+      options:
+        description: values for select
+        type: string
+      type:
+        description: string, number, bool, select
+        type: string
+      value:
+        description: value
+        type: string
+    required:
+    - key
+    type: object
+  model.Storage:
+    properties:
+      addition:
+        description: Additional information, defined in the corresponding driver
+        type: string
+      cache_expiration:
+        description: cache expire time
+        type: integer
+      custom_cache_policies:
+        type: string
+      disable_index:
+        type: boolean
+      disable_proxy_sign:
+        description: Disable sign for DownProxyURL
+        type: boolean
+      disabled:
+        description: if disabled
+        type: boolean
+      down_proxy_url:
+        type: string
+      driver:
+        description: driver used
+        type: string
+      enable_sign:
+        type: boolean
+      extract_folder:
+        type: string
+      id:
+        description: unique key
+        type: integer
+      modified:
+        type: string
+      mount_path:
+        description: must be standardized
+        type: string
+      order:
+        description: use to sort
+        type: integer
+      order_by:
+        type: string
+      order_direction:
+        type: string
+      proxy_range:
+        type: boolean
+      remark:
+        type: string
+      status:
+        type: string
+      web_proxy:
+        type: boolean
+      webdav_policy:
+        type: string
+    required:
+    - mount_path
+    type: object
+  model.StorageDetails:
+    properties:
+      totalSpace:
+        format: int64
+        type: integer
+      usedSpace:
+        format: int64
+        type: integer
     type: object
   model.User:
     properties:
@@ -143,18 +691,2949 @@ definitions:
     required:
     - username
     type: object
+  protocol.AttestationFormat:
+    enum:
+    - packed
+    - tpm
+    - android-key
+    - android-safetynet
+    - fido-u2f
+    - apple
+    - none
+    type: string
+    x-enum-varnames:
+    - AttestationFormatPacked
+    - AttestationFormatTPM
+    - AttestationFormatAndroidKey
+    - AttestationFormatAndroidSafetyNet
+    - AttestationFormatFIDOUniversalSecondFactor
+    - AttestationFormatApple
+    - AttestationFormatNone
+  protocol.AuthenticationExtensions:
+    additionalProperties: {}
+    type: object
+  protocol.AuthenticatorAttachment:
+    enum:
+    - platform
+    - cross-platform
+    type: string
+    x-enum-varnames:
+    - Platform
+    - CrossPlatform
+  protocol.AuthenticatorSelection:
+    properties:
+      authenticatorAttachment:
+        allOf:
+        - $ref: '#/definitions/protocol.AuthenticatorAttachment'
+        description: |-
+          AuthenticatorAttachment If this member is present, eligible authenticators are filtered to only
+          authenticators attached with the specified AuthenticatorAttachment enum.
+      requireResidentKey:
+        description: |-
+          RequireResidentKey this member describes the Relying Party's requirements regarding resident
+          credentials. If the parameter is set to true, the authenticator MUST create a client-side-resident
+          public key credential source when creating a public key credential.
+        type: boolean
+      residentKey:
+        allOf:
+        - $ref: '#/definitions/protocol.ResidentKeyRequirement'
+        description: |-
+          ResidentKey this member describes the Relying Party's requirements regarding resident
+          credentials per Webauthn Level 2.
+      userVerification:
+        allOf:
+        - $ref: '#/definitions/protocol.UserVerificationRequirement'
+        description: |-
+          UserVerification This member describes the Relying Party's requirements regarding user verification for
+          the create() operation. Eligible authenticators are filtered to only those capable of satisfying this
+          requirement.
+    type: object
+  protocol.AuthenticatorTransport:
+    enum:
+    - usb
+    - nfc
+    - ble
+    - smart-card
+    - hybrid
+    - internal
+    type: string
+    x-enum-varnames:
+    - USB
+    - NFC
+    - BLE
+    - SmartCard
+    - Hybrid
+    - Internal
+  protocol.ConveyancePreference:
+    enum:
+    - none
+    - indirect
+    - direct
+    - enterprise
+    type: string
+    x-enum-varnames:
+    - PreferNoAttestation
+    - PreferIndirectAttestation
+    - PreferDirectAttestation
+    - PreferEnterpriseAttestation
+  protocol.CredentialAssertion:
+    properties:
+      mediation:
+        $ref: '#/definitions/protocol.CredentialMediationRequirement'
+      publicKey:
+        $ref: '#/definitions/protocol.PublicKeyCredentialRequestOptions'
+    type: object
+  protocol.CredentialCreation:
+    properties:
+      mediation:
+        $ref: '#/definitions/protocol.CredentialMediationRequirement'
+      publicKey:
+        $ref: '#/definitions/protocol.PublicKeyCredentialCreationOptions'
+    type: object
+  protocol.CredentialDescriptor:
+    properties:
+      id:
+        description: CredentialID The ID of a credential to allow/disallow.
+        items:
+          type: integer
+        type: array
+      transports:
+        description: The authenticator transports that can be used.
+        items:
+          $ref: '#/definitions/protocol.AuthenticatorTransport'
+        type: array
+      type:
+        allOf:
+        - $ref: '#/definitions/protocol.CredentialType'
+        description: The valid credential types.
+    type: object
+  protocol.CredentialMediationRequirement:
+    enum:
+    - ""
+    - silent
+    - optional
+    - conditional
+    - required
+    type: string
+    x-enum-varnames:
+    - MediationDefault
+    - MediationSilent
+    - MediationOptional
+    - MediationConditional
+    - MediationRequired
+  protocol.CredentialParameter:
+    properties:
+      alg:
+        $ref: '#/definitions/webauthncose.COSEAlgorithmIdentifier'
+      type:
+        $ref: '#/definitions/protocol.CredentialType'
+    type: object
+  protocol.CredentialType:
+    enum:
+    - public-key
+    type: string
+    x-enum-varnames:
+    - PublicKeyCredentialType
+  protocol.PublicKeyCredentialCreationOptions:
+    properties:
+      attestation:
+        $ref: '#/definitions/protocol.ConveyancePreference'
+      attestationFormats:
+        items:
+          $ref: '#/definitions/protocol.AttestationFormat'
+        type: array
+      authenticatorSelection:
+        $ref: '#/definitions/protocol.AuthenticatorSelection'
+      challenge:
+        items:
+          type: integer
+        type: array
+      excludeCredentials:
+        items:
+          $ref: '#/definitions/protocol.CredentialDescriptor'
+        type: array
+      extensions:
+        $ref: '#/definitions/protocol.AuthenticationExtensions'
+      hints:
+        items:
+          $ref: '#/definitions/protocol.PublicKeyCredentialHints'
+        type: array
+      pubKeyCredParams:
+        items:
+          $ref: '#/definitions/protocol.CredentialParameter'
+        type: array
+      rp:
+        $ref: '#/definitions/protocol.RelyingPartyEntity'
+      timeout:
+        type: integer
+      user:
+        $ref: '#/definitions/protocol.UserEntity'
+    type: object
+  protocol.PublicKeyCredentialHints:
+    enum:
+    - security-key
+    - client-device
+    - hybrid
+    type: string
+    x-enum-varnames:
+    - PublicKeyCredentialHintSecurityKey
+    - PublicKeyCredentialHintClientDevice
+    - PublicKeyCredentialHintHybrid
+  protocol.PublicKeyCredentialRequestOptions:
+    properties:
+      allowCredentials:
+        items:
+          $ref: '#/definitions/protocol.CredentialDescriptor'
+        type: array
+      challenge:
+        items:
+          type: integer
+        type: array
+      extensions:
+        $ref: '#/definitions/protocol.AuthenticationExtensions'
+      hints:
+        items:
+          $ref: '#/definitions/protocol.PublicKeyCredentialHints'
+        type: array
+      rpId:
+        type: string
+      timeout:
+        type: integer
+      userVerification:
+        $ref: '#/definitions/protocol.UserVerificationRequirement'
+    type: object
+  protocol.RelyingPartyEntity:
+    properties:
+      id:
+        description: A unique identifier for the Relying Party entity, which sets
+          the RP ID.
+        type: string
+      name:
+        description: |-
+          A human-palatable name for the entity. Its function depends on what the PublicKeyCredentialEntity represents:
+
+          When inherited by PublicKeyCredentialRpEntity it is a human-palatable identifier for the Relying Party,
+          intended only for display. For example, "ACME Corporation", "Wonderful Widgets, Inc." or "ОАО Примертех".
+
+          When inherited by PublicKeyCredentialUserEntity, it is a human-palatable identifier for a user account. It is
+          intended only for display, i.e., aiding the user in determining the difference between user accounts with similar
+          displayNames. For example, "alexm", "alex.p.mueller@example.com" or "+14255551234".
+        type: string
+    type: object
+  protocol.ResidentKeyRequirement:
+    enum:
+    - discouraged
+    - preferred
+    - required
+    type: string
+    x-enum-varnames:
+    - ResidentKeyRequirementDiscouraged
+    - ResidentKeyRequirementPreferred
+    - ResidentKeyRequirementRequired
+  protocol.UserEntity:
+    properties:
+      displayName:
+        description: |-
+          A human-palatable name for the user account, intended only for display.
+          For example, "Alex P. Müller" or "田中 倫". The Relying Party SHOULD let
+          the user choose this, and SHOULD NOT restrict the choice more than necessary.
+        type: string
+      id:
+        description: |-
+          ID is the user handle of the user account entity. To ensure secure operation,
+          authentication and authorization decisions MUST be made on the basis of this id
+          member, not the displayName nor name members. See Section 6.1 of
+          [RFC8266](https://www.w3.org/TR/webauthn/#biblio-rfc8266).
+      name:
+        description: |-
+          A human-palatable name for the entity. Its function depends on what the PublicKeyCredentialEntity represents:
+
+          When inherited by PublicKeyCredentialRpEntity it is a human-palatable identifier for the Relying Party,
+          intended only for display. For example, "ACME Corporation", "Wonderful Widgets, Inc." or "ОАО Примертех".
+
+          When inherited by PublicKeyCredentialUserEntity, it is a human-palatable identifier for a user account. It is
+          intended only for display, i.e., aiding the user in determining the difference between user accounts with similar
+          displayNames. For example, "alexm", "alex.p.mueller@example.com" or "+14255551234".
+        type: string
+    type: object
+  protocol.UserVerificationRequirement:
+    enum:
+    - required
+    - preferred
+    - discouraged
+    type: string
+    x-enum-comments:
+      VerificationPreferred: This is the default
+    x-enum-descriptions:
+    - ""
+    - This is the default
+    - ""
+    x-enum-varnames:
+    - VerificationRequired
+    - VerificationPreferred
+    - VerificationDiscouraged
+  tache.State:
+    enum:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+    - 5
+    - 6
+    - 7
+    - 8
+    - 9
+    type: integer
+    x-enum-varnames:
+    - StatePending
+    - StateRunning
+    - StateSucceeded
+    - StateCanceling
+    - StateCanceled
+    - StateErrored
+    - StateFailing
+    - StateFailed
+    - StateWaitingRetry
+    - StateBeforeRetry
+  time.Duration:
+    enum:
+    - -9223372036854775808
+    - 9223372036854775807
+    - 1
+    - 1000
+    - 1000000
+    - 1000000000
+    - 60000000000
+    - 3600000000000
+    - 1
+    - 1000
+    - 1000000
+    - 1000000000
+    - 60000000000
+    - 3600000000000
+    - 1
+    - 1000
+    - 1000000
+    - 1
+    - 1000
+    - 1000000
+    - 1000000000
+    - 60000000000
+    - 3600000000000
+    - 1
+    - 1000
+    - 1000000
+    - 1000000000
+    - 60000000000
+    - 3600000000000
+    format: int64
+    type: integer
+    x-enum-varnames:
+    - minDuration
+    - maxDuration
+    - Nanosecond
+    - Microsecond
+    - Millisecond
+    - Second
+    - Minute
+    - Hour
+    - Nanosecond
+    - Microsecond
+    - Millisecond
+    - Second
+    - Minute
+    - Hour
+    - Nanosecond
+    - Microsecond
+    - Millisecond
+    - Nanosecond
+    - Microsecond
+    - Millisecond
+    - Second
+    - Minute
+    - Hour
+    - Nanosecond
+    - Microsecond
+    - Millisecond
+    - Second
+    - Minute
+    - Hour
+  webauthncose.COSEAlgorithmIdentifier:
+    enum:
+    - -7
+    - -8
+    - -35
+    - -36
+    - -37
+    - -38
+    - -39
+    - -47
+    - -257
+    - -258
+    - -259
+    - -65535
+    type: integer
+    x-enum-varnames:
+    - AlgES256
+    - AlgEdDSA
+    - AlgES384
+    - AlgES512
+    - AlgPS256
+    - AlgPS384
+    - AlgPS512
+    - AlgES256K
+    - AlgRS256
+    - AlgRS384
+    - AlgRS512
+    - AlgRS1
 info:
   contact:
     name: OpenList Team
-    url: https://t.me/OpenListTeam
+    url: https://github.com/OpenListTeam/
   description: A file list program that supports multiple storage.
   license:
     name: GNU Affero General Public License v3.0
     url: https://www.gnu.org/licenses/agpl-3.0.en.html
   termsOfService: https://doc.oplist.org/terms
   title: OpenList
-  version: la
+  version: latest
 paths:
+  /api/admin/driver/info:
+    get:
+      consumes:
+      - application/json
+      description: Get information about a specific driver by name
+      parameters:
+      - description: Driver Name
+        in: query
+        name: driver
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Driver info key-value map
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/driver.Info'
+              type: object
+        "404":
+          description: Driver Not Found
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Get Driver Info
+      tags:
+      - Admin
+  /api/admin/driver/list:
+    get:
+      consumes:
+      - application/json
+      description: Get information about all drivers
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Map of driver info
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  additionalProperties:
+                    $ref: '#/definitions/driver.Info'
+                  type: object
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: List all driver info
+      tags:
+      - Admin
+  /api/admin/driver/names:
+    get:
+      consumes:
+      - application/json
+      description: Get a list of all driver names
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of driver names
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  items:
+                    type: string
+                  type: array
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: List all driver names
+      tags:
+      - Admin
+  /api/admin/index/build:
+    post:
+      consumes:
+      - application/json
+      description: Build the search index from scratch
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success message
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Build Index
+      tags:
+      - Admin
+  /api/admin/index/clear:
+    post:
+      description: Clear the entire search index
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success message
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Clear Index
+      tags:
+      - Admin
+  /api/admin/index/progress:
+    get:
+      description: Get the current indexing progress
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Indexing progress data
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.IndexProgress'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Get Index Progress
+      tags:
+      - Admin
+  /api/admin/index/stop:
+    post:
+      description: Stop the ongoing indexing process
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success message
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Stop Index
+      tags:
+      - Admin
+  /api/admin/index/update:
+    post:
+      consumes:
+      - application/json
+      description: Update the search index for specified paths
+      parameters:
+      - description: Index Update Data
+        in: body
+        name: index
+        required: true
+        schema:
+          $ref: '#/definitions/handles.UpdateIndexReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success message
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Update Index
+      tags:
+      - Admin
+  /api/admin/message/get:
+    post:
+      consumes:
+      - application/json
+      description: Get a message from the server
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Message data
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/message.Message'
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Get Message
+      tags:
+      - Admin
+  /api/admin/message/send:
+    post:
+      consumes:
+      - application/json
+      description: Send a message to the server
+      parameters:
+      - description: Message Data
+        in: body
+        name: message
+        required: true
+        schema:
+          $ref: '#/definitions/message.Req'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success message
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Send Message
+      tags:
+      - Admin
+  /api/admin/meta/create:
+    post:
+      consumes:
+      - application/json
+      description: Create a new meta
+      parameters:
+      - description: Meta data
+        in: body
+        name: meta
+        required: true
+        schema:
+          $ref: '#/definitions/model.Meta'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success message
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Create Meta
+      tags:
+      - Admin
+  /api/admin/meta/delete:
+    post:
+      consumes:
+      - application/json
+      description: Delete a meta by ID
+      parameters:
+      - description: Meta ID
+        in: query
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success message
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Delete Meta
+      tags:
+      - Admin
+  /api/admin/meta/get:
+    get:
+      consumes:
+      - application/json
+      description: Get meta by ID
+      parameters:
+      - description: Meta ID
+        in: query
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.Meta'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Get Meta
+      tags:
+      - Admin
+  /api/admin/meta/list:
+    get:
+      consumes:
+      - application/json
+      description: Get a paginated list of metas
+      parameters:
+      - in: query
+        name: page
+        type: integer
+      - in: query
+        name: per_page
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.PageResp'
+            - properties:
+                content:
+                  items:
+                    $ref: '#/definitions/model.Meta'
+                  type: array
+                total:
+                  type: integer
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: List Metas
+      tags:
+      - Admin
+  /api/admin/meta/update:
+    post:
+      consumes:
+      - application/json
+      description: Update an existing meta
+      parameters:
+      - description: Meta data
+        in: body
+        name: meta
+        required: true
+        schema:
+          $ref: '#/definitions/model.Meta'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success message
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Update Meta
+      tags:
+      - Admin
+  /api/admin/scan/progress:
+    get:
+      description: Get the progress of the ongoing manual scan
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Manual scan progress data
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/handles.ManualScanResp'
+              type: object
+      summary: Get Manual Scan Progress
+      tags:
+      - Admin
+  /api/admin/scan/start:
+    post:
+      consumes:
+      - application/json
+      description: Start a manual scan for the specified path with an optional limit
+      parameters:
+      - description: Manual Scan Data
+        in: body
+        name: scan
+        required: true
+        schema:
+          $ref: '#/definitions/handles.ManualScanReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success message
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Start Manual Scan
+      tags:
+      - Admin
+  /api/admin/scan/stop:
+    post:
+      description: Stop the ongoing manual scan
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success message
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Stop Manual Scan
+      tags:
+      - Admin
+  /api/admin/setting/defaults:
+    get:
+      consumes:
+      - application/json
+      description: Get default settings, optionally filtered by group or groups
+      parameters:
+      - description: Group number to filter settings
+        in: query
+        name: group
+        type: string
+      - description: Comma-separated list of group numbers to filter settings
+        in: query
+        name: groups
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of default setting items
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/model.SettingItem'
+                  type: array
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Get Default Settings
+      tags:
+      - Admin
+  /api/admin/setting/delete:
+    post:
+      description: Delete a setting by its key
+      parameters:
+      - description: Key of the setting to delete
+        in: query
+        name: key
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success message
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Delete Setting
+      tags:
+      - Admin
+  /api/admin/setting/get:
+    get:
+      consumes:
+      - application/json
+      description: Get setting by key or keys
+      parameters:
+      - description: Setting key
+        in: query
+        name: key
+        type: string
+      - description: Comma-separated list of setting keys
+        in: query
+        name: keys
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Single setting item
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.SettingItem'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Get Setting
+      tags:
+      - Admin
+  /api/admin/setting/list:
+    get:
+      consumes:
+      - application/json
+      description: List settings, optionally filtered by group or groups
+      parameters:
+      - description: Group number to filter settings
+        in: query
+        name: group
+        type: string
+      - description: Comma-separated list of group numbers to filter settings
+        in: query
+        name: groups
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of setting items
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/model.SettingItem'
+                  type: array
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: List Settings
+      tags:
+      - Admin
+  /api/admin/setting/reset_token:
+    post:
+      description: Reset the system token and return the new token
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Newly generated token
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Reset System Token
+      tags:
+      - Admin
+  /api/admin/setting/save:
+    post:
+      consumes:
+      - application/json
+      description: Save multiple settings
+      parameters:
+      - description: List of setting items to save
+        in: body
+        name: settings
+        required: true
+        schema:
+          items:
+            $ref: '#/definitions/model.SettingItem'
+          type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success message
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Save Settings
+      tags:
+      - Admin
+  /api/admin/setting/set_115:
+    post:
+      consumes:
+      - application/json
+      description: Configure 115 Cloud settings for offline download tasks
+      parameters:
+      - description: 115 Cloud configuration data
+        in: body
+        name: cloud
+        required: true
+        schema:
+          $ref: '#/definitions/handles.Set115Req'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success message
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Configure 115 Cloud for Offline Download
+      tags:
+      - Admin
+  /api/admin/setting/set_115_open:
+    post:
+      consumes:
+      - application/json
+      description: Configure 115 Open settings for offline download tasks
+      parameters:
+      - description: 115 Open configuration data
+        in: body
+        name: cloud
+        required: true
+        schema:
+          $ref: '#/definitions/handles.Set115OpenReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success message
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Configure 115 Open for Offline Download
+      tags:
+      - Admin
+  /api/admin/setting/set_123_open:
+    post:
+      consumes:
+      - application/json
+      description: Configure 123 Open settings for offline download tasks
+      parameters:
+      - description: 123 Open configuration data
+        in: body
+        name: cloud
+        required: true
+        schema:
+          $ref: '#/definitions/handles.Set123OpenReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success message
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Configure 123 Open for Offline Download
+      tags:
+      - Admin
+  /api/admin/setting/set_123pan:
+    post:
+      consumes:
+      - application/json
+      description: Configure 123 Pan settings for offline download tasks
+      parameters:
+      - description: 123 Pan configuration data
+        in: body
+        name: cloud
+        required: true
+        schema:
+          $ref: '#/definitions/handles.Set123PanReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success message
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Configure 123 Pan for Offline Download
+      tags:
+      - Admin
+  /api/admin/setting/set_aria2:
+    post:
+      consumes:
+      - application/json
+      description: Configure qBittorrent settings for offline download tasks
+      parameters:
+      - description: qBittorrent configuration data
+        in: body
+        name: qbittorrent
+        required: true
+        schema:
+          $ref: '#/definitions/handles.SetQbittorrentReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success message
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Configure qBittorrent for Offline Download
+      tags:
+      - Admin
+  /api/admin/setting/set_pikpak:
+    post:
+      consumes:
+      - application/json
+      description: Configure PikPak settings for offline download tasks
+      parameters:
+      - description: PikPak configuration data
+        in: body
+        name: cloud
+        required: true
+        schema:
+          $ref: '#/definitions/handles.SetPikPakReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success message
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Configure PikPak for Offline Download
+      tags:
+      - Admin
+  /api/admin/setting/set_thunder:
+    post:
+      consumes:
+      - application/json
+      description: Configure Thunder settings for offline download tasks
+      parameters:
+      - description: Thunder configuration data
+        in: body
+        name: cloud
+        required: true
+        schema:
+          $ref: '#/definitions/handles.SetThunderReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success message
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Configure Thunder for Offline Download
+      tags:
+      - Admin
+  /api/admin/setting/set_thunder_browser:
+    post:
+      consumes:
+      - application/json
+      description: Configure Thunder Browser settings for offline download tasks
+      parameters:
+      - description: Thunder Browser configuration data
+        in: body
+        name: cloud
+        required: true
+        schema:
+          $ref: '#/definitions/handles.SetThunderBrowserReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success message
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Configure Thunder Browser for Offline Download
+      tags:
+      - Admin
+  /api/admin/setting/set_thunderx:
+    post:
+      consumes:
+      - application/json
+      description: Configure ThunderX settings for offline download tasks
+      parameters:
+      - description: ThunderX configuration data
+        in: body
+        name: cloud
+        required: true
+        schema:
+          $ref: '#/definitions/handles.SetThunderXReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success message
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Configure ThunderX for Offline Download
+      tags:
+      - Admin
+  /api/admin/setting/set_transmission:
+    post:
+      consumes:
+      - application/json
+      description: Configure Transmission settings for offline download tasks
+      parameters:
+      - description: Transmission configuration data
+        in: body
+        name: transmission
+        required: true
+        schema:
+          $ref: '#/definitions/handles.SetTransmissionReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success message
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Configure Transmission for Offline Download
+      tags:
+      - Admin
+  /api/admin/sshkey/delete:
+    post:
+      description: Delete an SSH public key by its ID
+      parameters:
+      - description: ID of the SSH public key to delete
+        in: query
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success message
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Delete Public Key
+      tags:
+      - Admin
+  /api/admin/sshkey/list:
+    get:
+      description: List all SSH public keys associated with a specified user ID
+      parameters:
+      - description: User ID
+        in: query
+        name: uid
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of user's SSH public keys
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.PageResp'
+            - properties:
+                content:
+                  items:
+                    $ref: '#/definitions/model.SSHPublicKey'
+                  type: array
+                total:
+                  type: integer
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "404":
+          description: User Not Found
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: List Public Keys
+      tags:
+      - Admin
+  /api/admin/storage/create:
+    post:
+      consumes:
+      - application/json
+      description: Create a new storage
+      parameters:
+      - description: Storage data
+        in: body
+        name: storage
+        required: true
+        schema:
+          $ref: '#/definitions/model.Storage'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success message with new storage ID
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  properties:
+                    id:
+                      type: integer
+                  type: object
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Create Storage
+      tags:
+      - Admin
+  /api/admin/storage/delete:
+    post:
+      description: Delete a storage by ID
+      parameters:
+      - description: Storage ID
+        in: query
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success message
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Delete Storage
+      tags:
+      - Admin
+  /api/admin/storage/disable:
+    post:
+      description: Disable a storage by ID
+      parameters:
+      - description: Storage ID
+        in: query
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success message
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Disable Storage
+      tags:
+      - Admin
+  /api/admin/storage/enable:
+    post:
+      description: Enable a storage by ID
+      parameters:
+      - description: Storage ID
+        in: query
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success message
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Enable Storage
+      tags:
+      - Admin
+  /api/admin/storage/get:
+    get:
+      description: Get storage details by ID
+      parameters:
+      - description: Storage ID
+        in: query
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Storage details
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/handles.StorageResp'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Get Storage
+      tags:
+      - Admin
+  /api/admin/storage/list:
+    get:
+      consumes:
+      - application/json
+      description: Get a paginated list of storages
+      parameters:
+      - in: query
+        name: page
+        type: integer
+      - in: query
+        name: per_page
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.PageResp'
+            - properties:
+                content:
+                  items:
+                    $ref: '#/definitions/handles.StorageResp'
+                  type: array
+                total:
+                  type: integer
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: List all storages
+      tags:
+      - Admin
+  /api/admin/storage/load_all:
+    post:
+      description: Trigger loading of all enabled storages
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success message
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Reload all storages
+      tags:
+      - Admin
+  /api/admin/storage/update:
+    post:
+      consumes:
+      - application/json
+      description: Update an existing storage
+      parameters:
+      - description: Storage data
+        in: body
+        name: storage
+        required: true
+        schema:
+          $ref: '#/definitions/model.Storage'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success message
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Update Storage
+      tags:
+      - Admin
+  /api/admin/task/{type}/cancel:
+    post:
+      consumes:
+      - application/json
+      description: 根据ID取消一个正在运行或排队中的任务
+      parameters:
+      - description: 任务类型
+        enum:
+        - upload
+        - copy
+        - move
+        - offline_download
+        - offline_download_transfer
+        - decompress
+        - decompress_upload
+        in: path
+        name: type
+        required: true
+        type: string
+      - description: 任务ID
+        in: query
+        name: tid
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 描述
+          schema:
+            $ref: '#/definitions/common.jsonResult'
+      summary: 取消任务
+      tags:
+      - Task
+  /api/admin/task/{type}/cancel_some:
+    post:
+      consumes:
+      - application/json
+      description: 提供一组任务ID，批量取消这些任务
+      parameters:
+      - description: 任务类型
+        enum:
+        - upload
+        - copy
+        - move
+        - offline_download
+        - offline_download_transfer
+        - decompress
+        - decompress_upload
+        in: path
+        name: type
+        required: true
+        type: string
+      - description: 任务ID列表
+        in: body
+        name: tids
+        required: true
+        schema:
+          items:
+            type: string
+          type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功描述（包含每个ID的处理结果）
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  additionalProperties:
+                    type: string
+                  type: object
+              type: object
+      summary: 批量取消任务
+      tags:
+      - Task
+  /api/admin/task/{type}/clear_done:
+    post:
+      consumes:
+      - application/json
+      description: 一键清理指定类型下所有已结束（成功/失败/取消）的任务
+      parameters:
+      - description: 任务类型
+        enum:
+        - upload
+        - copy
+        - move
+        - offline_download
+        - offline_download_transfer
+        - decompress
+        - decompress_upload
+        in: path
+        name: type
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 描述
+          schema:
+            $ref: '#/definitions/common.jsonResult'
+      summary: 清理所有已完成任务
+      tags:
+      - Task
+  /api/admin/task/{type}/clear_succeeded:
+    post:
+      consumes:
+      - application/json
+      description: 仅清理指定类型下所有状态为“成功”的任务
+      parameters:
+      - description: 任务类型
+        enum:
+        - upload
+        - copy
+        - move
+        - offline_download
+        - offline_download_transfer
+        - decompress
+        - decompress_upload
+        in: path
+        name: type
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 描述
+          schema:
+            $ref: '#/definitions/common.jsonResult'
+      summary: 清理已成功任务
+      tags:
+      - Task
+  /api/admin/task/{type}/delete:
+    post:
+      consumes:
+      - application/json
+      description: 从管理器中移除一个任务记录（无论其状态如何）
+      parameters:
+      - description: 任务类型
+        enum:
+        - upload
+        - copy
+        - move
+        - offline_download
+        - offline_download_transfer
+        - decompress
+        - decompress_upload
+        in: path
+        name: type
+        required: true
+        type: string
+      - description: 任务ID
+        in: query
+        name: tid
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 描述
+          schema:
+            $ref: '#/definitions/common.jsonResult'
+      summary: 删除任务
+      tags:
+      - Task
+  /api/admin/task/{type}/delete_some:
+    post:
+      consumes:
+      - application/json
+      description: 批量移除任务记录
+      parameters:
+      - description: 任务类型
+        enum:
+        - upload
+        - copy
+        - move
+        - offline_download
+        - offline_download_transfer
+        - decompress
+        - decompress_upload
+        in: path
+        name: type
+        required: true
+        type: string
+      - description: 任务ID列表
+        in: body
+        name: tids
+        required: true
+        schema:
+          items:
+            type: string
+          type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功描述
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  additionalProperties:
+                    type: string
+                  type: object
+              type: object
+      summary: 批量删除任务
+      tags:
+      - Task
+  /api/admin/task/{type}/done:
+    get:
+      consumes:
+      - application/json
+      description: 获取指定类型下，当前用户权限范围内的所有已完成（成功、失败、取消）任务
+      parameters:
+      - description: 任务类型
+        enum:
+        - upload
+        - copy
+        - move
+        - offline_download
+        - offline_download_transfer
+        - decompress
+        - decompress_upload
+        in: path
+        name: type
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 任务列表
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/handles.TaskInfo'
+                  type: array
+              type: object
+        "401":
+          description: 未授权
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: 获取已完成任务
+      tags:
+      - Task
+  /api/admin/task/{type}/info:
+    post:
+      consumes:
+      - application/json
+      description: 根据任务ID获取特定任务的详细执行状态
+      parameters:
+      - description: 任务类型
+        enum:
+        - upload
+        - copy
+        - move
+        - offline_download
+        - offline_download_transfer
+        - decompress
+        - decompress_upload
+        in: path
+        name: type
+        required: true
+        type: string
+      - description: 任务ID
+        in: query
+        name: tid
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 任务详情
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/handles.TaskInfo'
+              type: object
+        "404":
+          description: 任务不存在
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: 获取任务详情
+      tags:
+      - Task
+  /api/admin/task/{type}/retry:
+    post:
+      consumes:
+      - application/json
+      description: 重试一个执行失败的任务
+      parameters:
+      - description: 任务类型
+        enum:
+        - upload
+        - copy
+        - move
+        - offline_download
+        - offline_download_transfer
+        - decompress
+        - decompress_upload
+        in: path
+        name: type
+        required: true
+        type: string
+      - description: 任务ID
+        in: query
+        name: tid
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 描述
+          schema:
+            $ref: '#/definitions/common.jsonResult'
+      summary: 重试任务
+      tags:
+      - Task
+  /api/admin/task/{type}/retry_failed:
+    post:
+      consumes:
+      - application/json
+      description: 一键重试指定类型下所有状态为“失败”的任务
+      parameters:
+      - description: 任务类型
+        enum:
+        - upload
+        - copy
+        - move
+        - offline_download
+        - offline_download_transfer
+        - decompress
+        - decompress_upload
+        in: path
+        name: type
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 描述
+          schema:
+            $ref: '#/definitions/common.jsonResult'
+      summary: 重试所有失败任务
+      tags:
+      - Task
+  /api/admin/task/{type}/retry_some:
+    post:
+      consumes:
+      - application/json
+      description: 批量重试已失败的任务
+      parameters:
+      - description: 任务类型
+        enum:
+        - upload
+        - copy
+        - move
+        - offline_download
+        - offline_download_transfer
+        - decompress
+        - decompress_upload
+        in: path
+        name: type
+        required: true
+        type: string
+      - description: 任务ID列表
+        in: body
+        name: tids
+        required: true
+        schema:
+          items:
+            type: string
+          type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功描述
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  additionalProperties:
+                    type: string
+                  type: object
+              type: object
+      summary: 批量重试任务
+      tags:
+      - Task
+  /api/admin/task/{type}/undone:
+    get:
+      consumes:
+      - application/json
+      description: 获取指定类型下，当前用户权限范围内的所有未完成（进行中、排队等）任务
+      parameters:
+      - description: 任务类型
+        enum:
+        - upload
+        - copy
+        - move
+        - offline_download
+        - offline_download_transfer
+        - decompress
+        - decompress_upload
+        in: path
+        name: type
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 任务列表
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/handles.TaskInfo'
+                  type: array
+              type: object
+        "401":
+          description: 未授权
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: 获取未完成任务
+      tags:
+      - Task
+  /api/admin/user/cancel_2fa:
+    post:
+      consumes:
+      - application/json
+      description: Cancel two-factor authentication for a user by ID
+      parameters:
+      - description: User ID
+        in: query
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success message
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Cancel 2FA for User
+      tags:
+      - Admin
+  /api/admin/user/create:
+    post:
+      consumes:
+      - application/json
+      description: Create a new user
+      parameters:
+      - description: User data
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/model.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success message
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Create User
+      tags:
+      - Admin
+  /api/admin/user/del_cache:
+    post:
+      consumes:
+      - application/json
+      description: Delete the cache for a user by username
+      parameters:
+      - description: Username
+        in: query
+        name: username
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success message
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Delete User Cache
+      tags:
+      - Admin
+  /api/admin/user/delete:
+    post:
+      consumes:
+      - application/json
+      description: Delete a user by ID
+      parameters:
+      - description: User ID
+        in: query
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Deletion successful
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Delete User
+      tags:
+      - Admin
+  /api/admin/user/get:
+    get:
+      consumes:
+      - application/json
+      description: Get user by ID
+      parameters:
+      - description: User ID
+        in: query
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User object
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.User'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Get User
+      tags:
+      - Admin
+  /api/admin/user/list:
+    get:
+      consumes:
+      - application/json
+      description: Get a paginated list of users
+      parameters:
+      - in: query
+        name: page
+        type: integer
+      - in: query
+        name: per_page
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.PageResp'
+            - properties:
+                content:
+                  items:
+                    $ref: '#/definitions/model.User'
+                  type: array
+                total:
+                  type: integer
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: List Users
+      tags:
+      - Admin
+  /api/admin/user/update:
+    post:
+      consumes:
+      - application/json
+      description: Update an existing user
+      parameters:
+      - description: User data
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/model.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Update successful
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Update User
+      tags:
+      - Admin
   /api/auth/2fa/generate:
     post:
       description: Generate a new 2FA (TOTP) secret for current user
@@ -168,14 +3647,12 @@ paths:
             - $ref: '#/definitions/common.jsonResult'
             - properties:
                 data:
-                  allOf:
-                  - $ref: '#/definitions/common.mapResult'
-                  - properties:
-                      qr:
-                        type: string
-                      secret:
-                        type: string
-                    type: object
+                  properties:
+                    qr:
+                      type: string
+                    secret:
+                      type: string
+                  type: object
               type: object
         "403":
           description: Forbidden
@@ -195,7 +3672,104 @@ paths:
                 data:
                   type: string
               type: object
+      security:
+      - Authorization: []
       summary: Generate 2FA secret
+      tags:
+      - Authentication
+  /api/auth/2fa/verify:
+    post:
+      consumes:
+      - application/json
+      description: Verify the provided 2FA code and enable 2FA for the current user
+      parameters:
+      - description: 2FA verification data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/handles.Verify2FAReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 2FA enabled successfully
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "403":
+          description: Forbidden
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      security:
+      - Authorization: []
+      summary: Verify and enable 2FA
+      tags:
+      - Authentication
+  /api/auth/get_sso_id:
+    get:
+      consumes:
+      - application/json
+      description: Process the callback from the SSO provider, authenticate the user,
+        and generate a token.
+      parameters:
+      - description: SSO method used
+        in: query
+        name: method
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Login successful, return token
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  properties:
+                    token:
+                      type: string
+                  type: object
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Handle SSO provider callback and authenticate user
       tags:
       - Authentication
   /api/auth/ldap/login:
@@ -220,12 +3794,10 @@ paths:
             - $ref: '#/definitions/common.jsonResult'
             - properties:
                 data:
-                  allOf:
-                  - $ref: '#/definitions/common.mapResult'
-                  - properties:
-                      token:
-                        type: string
-                    type: object
+                  properties:
+                    token:
+                      type: string
+                  type: object
               type: object
         "400":
           description: Bad Request
@@ -281,12 +3853,10 @@ paths:
             - $ref: '#/definitions/common.jsonResult'
             - properties:
                 data:
-                  allOf:
-                  - $ref: '#/definitions/common.mapResult'
-                  - properties:
-                      token:
-                        type: string
-                    type: object
+                  properties:
+                    token:
+                      type: string
+                  type: object
               type: object
         "400":
           description: Bad Request
@@ -340,12 +3910,10 @@ paths:
             - $ref: '#/definitions/common.jsonResult'
             - properties:
                 data:
-                  allOf:
-                  - $ref: '#/definitions/common.mapResult'
-                  - properties:
-                      token:
-                        type: string
-                    type: object
+                  properties:
+                    token:
+                      type: string
+                  type: object
               type: object
         "400":
           description: Bad Request
@@ -401,9 +3969,1225 @@ paths:
                 data:
                   type: string
               type: object
+      security:
+      - Authorization: []
       summary: User Logout
       tags:
       - Authentication
+  /api/auth/sso_callback:
+    get:
+      consumes:
+      - application/json
+      description: Process the callback from the SSO provider, authenticate the user,
+        and generate a token.
+      parameters:
+      - description: SSO method used
+        in: query
+        name: method
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Login successful, return token
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  properties:
+                    token:
+                      type: string
+                  type: object
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Handle SSO provider callback and authenticate user
+      tags:
+      - Authentication
+  /api/auth/sso_get_token:
+    get:
+      consumes:
+      - application/json
+      description: Process the callback from the SSO provider, authenticate the user,
+        and generate a token.
+      parameters:
+      - description: SSO method used
+        in: query
+        name: method
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Login successful, return token
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  properties:
+                    token:
+                      type: string
+                  type: object
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Handle SSO provider callback and authenticate user
+      tags:
+      - Authentication
+  /api/auth/sso_redirect:
+    get:
+      consumes:
+      - application/json
+      description: Redirect users to the configured Single Sign-On (SSO) provider
+        for authentication.
+      parameters:
+      - description: SSO method to use
+        in: query
+        name: method
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "302":
+          description: Redirect to SSO provider
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "403":
+          description: Forbidden
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Redirect to configured SSO provider for authentication
+      tags:
+      - Authentication
+  /api/authn/webauthn_begin_login:
+    get:
+      consumes:
+      - application/json
+      description: Begin WebAuthn Login
+      parameters:
+      - description: Username for login. If not provided, client-side discoverable
+          login will be used.
+        in: query
+        name: username
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            properties:
+              options:
+                $ref: '#/definitions/protocol.CredentialAssertion'
+              session:
+                type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "403":
+          description: Forbidden
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Begin WebAuthn Login
+      tags:
+      - Authentication
+  /api/authn/webauthn_begin_registration:
+    get:
+      consumes:
+      - application/json
+      description: Begin WebAuthn Registration
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            properties:
+              options:
+                $ref: '#/definitions/protocol.CredentialCreation'
+              session:
+                type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "403":
+          description: Forbidden
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      security:
+      - Authorization: []
+      summary: Begin WebAuthn Registration
+      tags:
+      - Authentication
+  /api/authn/webauthn_delete_credential:
+    post:
+      consumes:
+      - application/json
+      description: Delete a WebAuthn credential for the current user
+      parameters:
+      - description: Credential ID to delete
+        in: body
+        name: credential
+        required: true
+        schema:
+          properties:
+            id:
+              type: string
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Deletion successful
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "403":
+          description: Forbidden
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      security:
+      - Authorization: []
+      summary: Delete WebAuthn Credential
+      tags:
+      - Authentication
+  /api/authn/webauthn_finish_login:
+    post:
+      consumes:
+      - application/json
+      description: Finish WebAuthn Login
+      parameters:
+      - description: Base64-encoded session data from BeginAuthnLogin response
+        in: header
+        name: session
+        required: true
+        type: string
+      - description: Username for login. If not provided, client-side discoverable
+          login will be used.
+        in: query
+        name: username
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Login successful, returns token
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  properties:
+                    token:
+                      type: string
+                  type: object
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "403":
+          description: Forbidden
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Finish WebAuthn Login
+      tags:
+      - Authentication
+  /api/authn/webauthn_finish_registration:
+    post:
+      consumes:
+      - application/json
+      description: Finish WebAuthn Registration
+      parameters:
+      - description: Base64-encoded session data from BeginAuthnRegistration response
+        in: header
+        name: session
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Registration successful
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "403":
+          description: Forbidden
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      security:
+      - Authorization: []
+      summary: Finish WebAuthn Registration
+      tags:
+      - Authentication
+  /api/authn/webauthn_get_credentials:
+    get:
+      consumes:
+      - application/json
+      description: Get all WebAuthn credentials for the current user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of WebAuthn credentials
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  items:
+                    properties:
+                      finger_print:
+                        type: string
+                      id:
+                        items:
+                          format: int32
+                          type: integer
+                        type: array
+                    type: object
+                  type: array
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "403":
+          description: Forbidden
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      security:
+      - Authorization: []
+      summary: Get WebAuthn Credentials
+      tags:
+      - Authentication
+  /api/fs/batch_rename:
+    post:
+      consumes:
+      - application/json
+      description: Rename multiple files in a specified directory using a list of
+        source and new names
+      parameters:
+      - description: Batch rename request
+        in: body
+        name: rename
+        required: true
+        schema:
+          $ref: '#/definitions/handles.BatchRenameReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Batch rename successful
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      security:
+      - Authorization: []
+      summary: Batch Rename Files
+      tags:
+      - Filesystem
+  /api/fs/copy:
+    post:
+      consumes:
+      - application/json
+      description: Copy files or directories from source directory to destination
+        directory.
+      parameters:
+      - description: Copy request
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/handles.MoveCopyReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Copy successful
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      security:
+      - Authorization: []
+      summary: Copy files or directories
+      tags:
+      - Filesystem
+  /api/fs/dirs:
+    post:
+      consumes:
+      - application/json
+      description: List all directories under a specified path
+      parameters:
+      - description: Directory listing request
+        in: body
+        name: dir_req
+        required: true
+        schema:
+          $ref: '#/definitions/handles.DirReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of directories
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/handles.DirResp'
+                  type: array
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      security:
+      - Authorization: []
+      summary: List Directories
+      tags:
+      - Filesystem
+  /api/fs/link:
+    post:
+      consumes:
+      - application/json
+      description: Get the real link of the specified path. This endpoint is intended
+        for use by proxy programs and may contain cookies, so it is only allowed for
+        admin users.
+      parameters:
+      - description: Link request
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/handles.MkdirOrLinkReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success response
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/model.Link'
+              type: object
+        "400":
+          description: Bad request
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "403":
+          description: Forbidden
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Internal server error
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      security:
+      - Authorization: []
+      summary: Get Real Link
+      tags:
+      - Filesystem
+  /api/fs/mkdir:
+    post:
+      consumes:
+      - application/json
+      description: Create a new directory at the specified path.
+      parameters:
+      - description: Directory creation request
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/handles.MkdirOrLinkReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success response
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "400":
+          description: Bad request
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "403":
+          description: Forbidden
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Internal server error
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Create Directory
+      tags:
+      - Filesystem
+  /api/fs/move:
+    post:
+      consumes:
+      - application/json
+      description: Move files from source directory to destination directory.
+      parameters:
+      - description: Move request
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/handles.MoveCopyReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Move successful
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      security:
+      - Authorization: []
+      summary: Move Files
+      tags:
+      - Filesystem
+  /api/fs/offline_download/add:
+    post:
+      consumes:
+      - application/json
+      description: Create an offline download task (HTTP/magnet/torrent)
+      parameters:
+      - description: Offline download task data
+        in: body
+        name: task
+        required: true
+        schema:
+          $ref: '#/definitions/handles.AddOfflineDownloadReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Details of the created offline download tasks
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  additionalProperties: true
+                  type: object
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "403":
+          description: Permission Denied
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      security:
+      - Authorization: []
+      summary: Add offline download task
+      tags:
+      - FileSystem
+  /api/fs/other:
+    post:
+      consumes:
+      - application/json
+      description: Handle other filesystem operations based on provided arguments
+      parameters:
+      - description: Filesystem operation request
+        in: body
+        name: fs_other
+        required: true
+        schema:
+          $ref: '#/definitions/handles.FsOtherReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Operation result
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data: {}
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      security:
+      - Authorization: []
+      summary: Fs Other Operations
+      tags:
+      - Filesystem
+  /api/fs/recursive_move:
+    post:
+      consumes:
+      - application/json
+      description: Move files/folders recursively (preserves directory structure)
+      parameters:
+      - description: Recursive move request
+        in: body
+        name: move
+        required: true
+        schema:
+          $ref: '#/definitions/handles.RecursiveMoveReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Recursive move successful
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      security:
+      - Authorization: []
+      summary: Recursive move
+      tags:
+      - Filesystem
+  /api/fs/regex_rename:
+    post:
+      consumes:
+      - application/json
+      description: Rename files in a specified directory using regex patterns for
+        source and new names
+      parameters:
+      - description: Regex-based rename request
+        in: body
+        name: rename
+        required: true
+        schema:
+          $ref: '#/definitions/handles.RegexRenameReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Regex-based rename successful
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      security:
+      - Authorization: []
+      summary: Regex-based Rename Files
+      tags:
+      - Filesystem
+  /api/fs/remove:
+    post:
+      consumes:
+      - application/json
+      description: Remove files or directories from the specified directory.
+      parameters:
+      - description: Remove request
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/handles.RemoveReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Remove successful
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      security:
+      - Authorization: []
+      summary: Remove Files or Directories
+      tags:
+      - Filesystem
+  /api/fs/remove_empty_directory:
+    post:
+      consumes:
+      - application/json
+      description: Recursively remove empty directories
+      parameters:
+      - description: Remove empty directories request
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/handles.RemoveEmptyDirectoryReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Remove empty directories successful
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      security:
+      - Authorization: []
+      summary: Remove Empty Directories
+      tags:
+      - Filesystem
+  /api/fs/rename:
+    post:
+      consumes:
+      - application/json
+      description: Rename a file or directory at the specified path.
+      parameters:
+      - description: Rename request
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/handles.RenameReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success response
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "400":
+          description: Bad request
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "403":
+          description: Forbidden
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Internal server error
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Rename File
+      tags:
+      - Filesystem
+  /api/fs/search:
+    post:
+      consumes:
+      - application/json
+      description: Search files and folders within the user's accessible scope
+      parameters:
+      - description: Search request
+        in: body
+        name: search
+        required: true
+        schema:
+          $ref: '#/definitions/handles.SearchReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Search results with pagination
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.PageResp'
+            - properties:
+                content:
+                  items:
+                    $ref: '#/definitions/handles.SearchResp'
+                  type: array
+                total:
+                  type: integer
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      security:
+      - Authorization: []
+      summary: Search Files and Folders
+      tags:
+      - Filesystem
+  /api/fs/upload/form:
+    put:
+      consumes:
+      - multipart/form-data
+      description: Upload file using multipart form data (for browser uploads)
+      parameters:
+      - description: File to upload
+        in: formData
+        name: file
+        required: true
+        type: file
+      - description: File path (include filename)
+        in: formData
+        name: path
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: File upload successful
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "403":
+          description: Forbidden
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      security:
+      - Authorization: []
+      summary: Upload file (form)
+      tags:
+      - Filesystem
+  /api/fs/upload/stream:
+    put:
+      consumes:
+      - application/octet-stream
+      description: Upload file using streaming (for large files or programmatic uploads)
+      parameters:
+      - description: File path (URL-encoded, include filename)
+        in: path
+        name: file
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: File upload successful
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "403":
+          description: Forbidden
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      security:
+      - Authorization: []
+      summary: Upload file (stream)
+      tags:
+      - Filesystem
   /api/me:
     get:
       description: Get current user information by token. If token is empty, returns
@@ -429,6 +5213,8 @@ paths:
                 data:
                   type: string
               type: object
+      security:
+      - Authorization: []
       summary: Get Current User
       tags:
       - User
@@ -473,6 +5259,8 @@ paths:
                 data:
                   type: string
               type: object
+      security:
+      - Authorization: []
       summary: Update Current User
       tags:
       - User
@@ -527,7 +5315,71 @@ paths:
                 data:
                   type: string
               type: object
+      security:
+      - Authorization: []
       summary: Add My Public Key
+      tags:
+      - User
+  /api/me/sshkey/delete:
+    delete:
+      description: Delete an SSH public key associated with the current user
+      parameters:
+      - description: ID of the SSH public key to delete
+        in: query
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success message
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "401":
+          description: Unauthorized
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "404":
+          description: Not Found
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      security:
+      - Authorization: []
+      summary: Delete My Public Key
       tags:
       - User
   /api/me/sshkey/list:
@@ -558,7 +5410,567 @@ paths:
                 data:
                   type: string
               type: object
+      security:
+      - Authorization: []
       summary: List My Public Keys
       tags:
       - User
+  /api/public/archive_extensions:
+    get:
+      consumes:
+      - application/json
+      description: Get a list of supported archive extensions
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of archive extensions
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  items:
+                    type: string
+                  type: array
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Get supported archive extensions
+      tags:
+      - Public
+  /api/public/offline_download_tools:
+    get:
+      consumes:
+      - application/json
+      description: Get a list of available offline download tools
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of offline download tools
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  items:
+                    type: string
+                  type: array
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Get Offline Download Tools
+      tags:
+      - Public
+  /api/public/settings:
+    get:
+      consumes:
+      - application/json
+      description: Get all public settings as a key-value map
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Map of public settings
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  additionalProperties:
+                    type: string
+                  type: object
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Get Public Settings
+      tags:
+      - Public
+  /api/task/{type}/cancel:
+    post:
+      consumes:
+      - application/json
+      description: 根据ID取消一个正在运行或排队中的任务
+      parameters:
+      - description: 任务类型
+        enum:
+        - upload
+        - copy
+        - move
+        - offline_download
+        - offline_download_transfer
+        - decompress
+        - decompress_upload
+        in: path
+        name: type
+        required: true
+        type: string
+      - description: 任务ID
+        in: query
+        name: tid
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 描述
+          schema:
+            $ref: '#/definitions/common.jsonResult'
+      summary: 取消任务
+      tags:
+      - Task
+  /api/task/{type}/cancel_some:
+    post:
+      consumes:
+      - application/json
+      description: 提供一组任务ID，批量取消这些任务
+      parameters:
+      - description: 任务类型
+        enum:
+        - upload
+        - copy
+        - move
+        - offline_download
+        - offline_download_transfer
+        - decompress
+        - decompress_upload
+        in: path
+        name: type
+        required: true
+        type: string
+      - description: 任务ID列表
+        in: body
+        name: tids
+        required: true
+        schema:
+          items:
+            type: string
+          type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功描述（包含每个ID的处理结果）
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  additionalProperties:
+                    type: string
+                  type: object
+              type: object
+      summary: 批量取消任务
+      tags:
+      - Task
+  /api/task/{type}/clear_done:
+    post:
+      consumes:
+      - application/json
+      description: 一键清理指定类型下所有已结束（成功/失败/取消）的任务
+      parameters:
+      - description: 任务类型
+        enum:
+        - upload
+        - copy
+        - move
+        - offline_download
+        - offline_download_transfer
+        - decompress
+        - decompress_upload
+        in: path
+        name: type
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 描述
+          schema:
+            $ref: '#/definitions/common.jsonResult'
+      summary: 清理所有已完成任务
+      tags:
+      - Task
+  /api/task/{type}/clear_succeeded:
+    post:
+      consumes:
+      - application/json
+      description: 仅清理指定类型下所有状态为“成功”的任务
+      parameters:
+      - description: 任务类型
+        enum:
+        - upload
+        - copy
+        - move
+        - offline_download
+        - offline_download_transfer
+        - decompress
+        - decompress_upload
+        in: path
+        name: type
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 描述
+          schema:
+            $ref: '#/definitions/common.jsonResult'
+      summary: 清理已成功任务
+      tags:
+      - Task
+  /api/task/{type}/delete:
+    post:
+      consumes:
+      - application/json
+      description: 从管理器中移除一个任务记录（无论其状态如何）
+      parameters:
+      - description: 任务类型
+        enum:
+        - upload
+        - copy
+        - move
+        - offline_download
+        - offline_download_transfer
+        - decompress
+        - decompress_upload
+        in: path
+        name: type
+        required: true
+        type: string
+      - description: 任务ID
+        in: query
+        name: tid
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 描述
+          schema:
+            $ref: '#/definitions/common.jsonResult'
+      summary: 删除任务
+      tags:
+      - Task
+  /api/task/{type}/delete_some:
+    post:
+      consumes:
+      - application/json
+      description: 批量移除任务记录
+      parameters:
+      - description: 任务类型
+        enum:
+        - upload
+        - copy
+        - move
+        - offline_download
+        - offline_download_transfer
+        - decompress
+        - decompress_upload
+        in: path
+        name: type
+        required: true
+        type: string
+      - description: 任务ID列表
+        in: body
+        name: tids
+        required: true
+        schema:
+          items:
+            type: string
+          type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功描述
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  additionalProperties:
+                    type: string
+                  type: object
+              type: object
+      summary: 批量删除任务
+      tags:
+      - Task
+  /api/task/{type}/done:
+    get:
+      consumes:
+      - application/json
+      description: 获取指定类型下，当前用户权限范围内的所有已完成（成功、失败、取消）任务
+      parameters:
+      - description: 任务类型
+        enum:
+        - upload
+        - copy
+        - move
+        - offline_download
+        - offline_download_transfer
+        - decompress
+        - decompress_upload
+        in: path
+        name: type
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 任务列表
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/handles.TaskInfo'
+                  type: array
+              type: object
+        "401":
+          description: 未授权
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: 获取已完成任务
+      tags:
+      - Task
+  /api/task/{type}/info:
+    post:
+      consumes:
+      - application/json
+      description: 根据任务ID获取特定任务的详细执行状态
+      parameters:
+      - description: 任务类型
+        enum:
+        - upload
+        - copy
+        - move
+        - offline_download
+        - offline_download_transfer
+        - decompress
+        - decompress_upload
+        in: path
+        name: type
+        required: true
+        type: string
+      - description: 任务ID
+        in: query
+        name: tid
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 任务详情
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/handles.TaskInfo'
+              type: object
+        "404":
+          description: 任务不存在
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: 获取任务详情
+      tags:
+      - Task
+  /api/task/{type}/retry:
+    post:
+      consumes:
+      - application/json
+      description: 重试一个执行失败的任务
+      parameters:
+      - description: 任务类型
+        enum:
+        - upload
+        - copy
+        - move
+        - offline_download
+        - offline_download_transfer
+        - decompress
+        - decompress_upload
+        in: path
+        name: type
+        required: true
+        type: string
+      - description: 任务ID
+        in: query
+        name: tid
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 描述
+          schema:
+            $ref: '#/definitions/common.jsonResult'
+      summary: 重试任务
+      tags:
+      - Task
+  /api/task/{type}/retry_failed:
+    post:
+      consumes:
+      - application/json
+      description: 一键重试指定类型下所有状态为“失败”的任务
+      parameters:
+      - description: 任务类型
+        enum:
+        - upload
+        - copy
+        - move
+        - offline_download
+        - offline_download_transfer
+        - decompress
+        - decompress_upload
+        in: path
+        name: type
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 描述
+          schema:
+            $ref: '#/definitions/common.jsonResult'
+      summary: 重试所有失败任务
+      tags:
+      - Task
+  /api/task/{type}/retry_some:
+    post:
+      consumes:
+      - application/json
+      description: 批量重试已失败的任务
+      parameters:
+      - description: 任务类型
+        enum:
+        - upload
+        - copy
+        - move
+        - offline_download
+        - offline_download_transfer
+        - decompress
+        - decompress_upload
+        in: path
+        name: type
+        required: true
+        type: string
+      - description: 任务ID列表
+        in: body
+        name: tids
+        required: true
+        schema:
+          items:
+            type: string
+          type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功描述
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  additionalProperties:
+                    type: string
+                  type: object
+              type: object
+      summary: 批量重试任务
+      tags:
+      - Task
+  /api/task/{type}/undone:
+    get:
+      consumes:
+      - application/json
+      description: 获取指定类型下，当前用户权限范围内的所有未完成（进行中、排队等）任务
+      parameters:
+      - description: 任务类型
+        enum:
+        - upload
+        - copy
+        - move
+        - offline_download
+        - offline_download_transfer
+        - decompress
+        - decompress_upload
+        in: path
+        name: type
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 任务列表
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/handles.TaskInfo'
+                  type: array
+              type: object
+        "401":
+          description: 未授权
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.jsonResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: 获取未完成任务
+      tags:
+      - Task
+securityDefinitions:
+  Authorization:
+    description: Token
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

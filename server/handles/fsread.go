@@ -125,6 +125,19 @@ func FsList(c *gin.Context, req *ListReq, user *model.User) {
 	})
 }
 
+// FsDirs list directories under a given path
+//
+//	@Summary		List Directories
+//	@Description	List all directories under a specified path
+//	@Tags			Filesystem
+//	@Accept			json
+//	@Produce		json
+//	@Param			dir_req	body		DirReq								true	"Directory listing request"
+//	@Success		200		{object}	common.jsonResult{data=[]DirResp}	"List of directories"
+//	@Failure		400		{object}	common.jsonResult{data=string}		"Bad Request"
+//	@Failure		500		{object}	common.jsonResult{data=string}		"Internal Server Error"
+//	@Router			/api/fs/dirs [post]
+//	@Security		Authorization
 func FsDirs(c *gin.Context) {
 	var req DirReq
 	if err := c.ShouldBind(&req); err != nil {
@@ -400,6 +413,19 @@ type FsOtherReq struct {
 	Password string `json:"password" form:"password"`
 }
 
+// FsOther handle other fs operations
+//
+//	@Summary		Fs Other Operations
+//	@Description	Handle other filesystem operations based on provided arguments
+//	@Tags			Filesystem
+//	@Accept			json
+//	@Produce		json
+//	@Param			fs_other	body		FsOtherReq							true	"Filesystem operation request"
+//	@Success		200			{object}	common.jsonResult{data=interface{}}	"Operation result"
+//	@Failure		400			{object}	common.jsonResult{data=string}		"Bad Request"
+//	@Failure		500			{object}	common.jsonResult{data=string}		"Internal Server Error"
+//	@Router			/api/fs/other [post]
+//	@Security		Authorization
 func FsOther(c *gin.Context) {
 	var req FsOtherReq
 	if err := c.ShouldBind(&req); err != nil {

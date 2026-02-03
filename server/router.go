@@ -84,9 +84,9 @@ func Init(e *gin.Engine) {
 	api.GET("/auth/get_sso_id", handles.SSOLoginCallback)
 	api.GET("/auth/sso_get_token", handles.SSOLoginCallback)
 
-	// webauthn
 	api.GET("/authn/webauthn_begin_login", handles.BeginAuthnLogin)
 	api.POST("/authn/webauthn_finish_login", handles.FinishAuthnLogin)
+	// webauthn
 	webauthn.GET("/webauthn_begin_registration", handles.BeginAuthnRegistration)
 	webauthn.POST("/webauthn_finish_registration", handles.FinishAuthnRegistration)
 	webauthn.POST("/delete_authn", handles.DeleteAuthnLogin)
@@ -173,20 +173,32 @@ func admin(g *gin.RouterGroup) {
 	// retain /admin/task API to ensure compatibility with legacy automation scripts
 	_task(g.Group("/task"))
 
+	// message
+	// / POST /api/message/get
 	ms := g.Group("/message")
 	ms.POST("/get", message.HttpInstance.GetHandle)
+	// / POST /api/message/send
 	ms.POST("/send", message.HttpInstance.SendHandle)
 
+	// / index management
 	index := g.Group("/index")
+	// / POST /api/admin/index/build
 	index.POST("/build", middlewares.SearchIndex, handles.BuildIndex)
+	// / POST /api/admin/index/update
 	index.POST("/update", middlewares.SearchIndex, handles.UpdateIndex)
+	// / POST /api/admin/index/stop
 	index.POST("/stop", middlewares.SearchIndex, handles.StopIndex)
+	// / POST /api/admin/index/clear
 	index.POST("/clear", middlewares.SearchIndex, handles.ClearIndex)
+	// / GET /api/admin/index/progress
 	index.GET("/progress", middlewares.SearchIndex, handles.GetProgress)
 
 	scan := g.Group("/scan")
+	// / / POST /api/admin/scan/start
 	scan.POST("/start", handles.StartManualScan)
+	// / / POST /api/admin/scan/stop
 	scan.POST("/stop", handles.StopManualScan)
+	// / GET /api/admin/scan/progress
 	scan.GET("/progress", handles.GetManualScanProgress)
 }
 
@@ -198,6 +210,8 @@ func fsAndShare(g *gin.RouterGroup) {
 	a.Any("/list", handles.FsArchiveListSplit)
 }
 
+// _fs setup filesystem related routes
+// the route is /api/fs/*
 func _fs(g *gin.RouterGroup) {
 	g.Any("/search", middlewares.SearchIndex, handles.Search)
 	g.Any("/other", handles.FsOther)

@@ -18,6 +18,17 @@ type UpdateIndexReq struct {
 	//IgnorePaths []string `json:"ignore_paths"`
 }
 
+// BuildIndex builds the index from scratch
+//
+//	@Summary		Build Index
+//	@Description	Build the search index from scratch
+//	@Tags			Admin
+//	@Accept			json
+//	@Produce		json
+//	@Success		200	{object}	common.jsonResult{data=string}	"Success message"
+//	@Failure		400	{object}	common.jsonResult{data=string}	"Bad Request"
+//	@Failure		500	{object}	common.jsonResult{data=string}	"Internal Server Error"
+//	@Router			/api/admin/index/build [post]
 func BuildIndex(c *gin.Context) {
 	if search.Running() {
 		common.ErrorStrResp(c, "index is running", 400)
@@ -39,6 +50,18 @@ func BuildIndex(c *gin.Context) {
 	common.SuccessResp(c)
 }
 
+// UpdateIndex updates the index for specified paths
+//
+//	@Summary		Update Index
+//	@Description	Update the search index for specified paths
+//	@Tags			Admin
+//	@Accept			json
+//	@Produce		json
+//	@Param			index	body		UpdateIndexReq					true	"Index Update Data"
+//	@Success		200		{object}	common.jsonResult{data=string}	"Success message"
+//	@Failure		400		{object}	common.jsonResult{data=string}	"Bad Request"
+//	@Failure		500		{object}	common.jsonResult{data=string}	"Internal Server Error"
+//	@Router			/api/admin/index/update [post]
 func UpdateIndex(c *gin.Context) {
 	var req UpdateIndexReq
 	if err := c.ShouldBind(&req); err != nil {
@@ -71,6 +94,15 @@ func UpdateIndex(c *gin.Context) {
 	common.SuccessResp(c)
 }
 
+// StopIndex stops the ongoing indexing process
+//
+//	@Summary		Stop Index
+//	@Description	Stop the ongoing indexing process
+//	@Tags			Admin
+//	@Produce		json
+//	@Success		200	{object}	common.jsonResult{data=string}	"Success message"
+//	@Failure		400	{object}	common.jsonResult{data=string}	"Bad Request"
+//	@Router			/api/admin/index/stop [post]
 func StopIndex(c *gin.Context) {
 	quit := search.Quit.Load()
 	if quit == nil {
@@ -84,6 +116,16 @@ func StopIndex(c *gin.Context) {
 	common.SuccessResp(c)
 }
 
+// ClearIndex clears the entire search index
+//
+//	@Summary		Clear Index
+//	@Description	Clear the entire search index
+//	@Tags			Admin
+//	@Produce		json
+//	@Success		200	{object}	common.jsonResult{data=string}	"Success message"
+//	@Failure		400	{object}	common.jsonResult{data=string}	"Bad Request"
+//	@Failure		500	{object}	common.jsonResult{data=string}	"Internal Server Error"
+//	@Router			/api/admin/index/clear [post]
 func ClearIndex(c *gin.Context) {
 	if search.Running() {
 		common.ErrorStrResp(c, "index is running", 400)
@@ -99,6 +141,15 @@ func ClearIndex(c *gin.Context) {
 	common.SuccessResp(c)
 }
 
+// GetProgress gets the current indexing progress
+//
+//	@Summary		Get Index Progress
+//	@Description	Get the current indexing progress
+//	@Tags			Admin
+//	@Produce		json
+//	@Success		200	{object}	common.jsonResult{data=model.IndexProgress}	"Indexing progress data"
+//	@Failure		500	{object}	common.jsonResult{data=string}				"Internal Server Error"
+//	@Router			/api/admin/index/progress [get]
 func GetProgress(c *gin.Context) {
 	progress, err := search.Progress()
 	if err != nil {

@@ -26,11 +26,11 @@ type LoginReq struct {
 //	@Tags				Authentication
 //	@Accept				json
 //	@Produce			json
-//	@Param				login	body		LoginReq												true	"Login request"
-//	@Success			200		{object}	common.jsonResult{data=common.mapResult{token=string}}	"Login successful, returns token"
-//	@Failure			400		{object}	common.jsonResult{data=string}							"Bad Request"
-//	@Failure			402		{object}	common.jsonResult{data=string}							"2FA Required"
-//	@Failure			429		{object}	common.jsonResult{data=string}							"Too Many Requests"
+//	@Param				login	body		LoginReq										true	"Login request"
+//	@Success			200		{object}	common.jsonResult{data=object{token=string}}	"Login successful, returns token"
+//	@Failure			400		{object}	common.jsonResult{data=string}					"Bad Request"
+//	@Failure			402		{object}	common.jsonResult{data=string}					"2FA Required"
+//	@Failure			429		{object}	common.jsonResult{data=string}					"Too Many Requests"
 //	@deprecatedRouter	/api/auth/login [post]
 func Login(c *gin.Context) {
 	var req LoginReq
@@ -49,11 +49,11 @@ func Login(c *gin.Context) {
 //	@Tags			Authentication
 //	@Accept			json
 //	@Produce		json
-//	@Param			login	body		LoginReq												true	"Login request"
-//	@Success		200		{object}	common.jsonResult{data=common.mapResult{token=string}}	"Login successful, returns token"
-//	@Failure		400		{object}	common.jsonResult{data=string}							"Bad Request"
-//	@Failure		402		{object}	common.jsonResult{data=string}							"2FA Required"
-//	@Failure		429		{object}	common.jsonResult{data=string}							"Too Many Requests"
+//	@Param			login	body		LoginReq										true	"Login request"
+//	@Success		200		{object}	common.jsonResult{data=object{token=string}}	"Login successful, returns token"
+//	@Failure		400		{object}	common.jsonResult{data=string}					"Bad Request"
+//	@Failure		402		{object}	common.jsonResult{data=string}					"2FA Required"
+//	@Failure		429		{object}	common.jsonResult{data=string}					"Too Many Requests"
 //	@Router			/api/auth/login/hash [post]
 func LoginHash(c *gin.Context) {
 	var req LoginReq
@@ -119,6 +119,7 @@ type UserResp struct {
 //	@Success		200	{object}	common.jsonResult{data=UserResp}	"Current user information"
 //	@Failure		401	{object}	common.jsonResult{data=string}		"Unauthorized"
 //	@Router			/api/me [get]
+//	@Security		Authorization
 func CurrentUser(c *gin.Context) {
 	user := c.Request.Context().Value(conf.UserKey).(*model.User)
 	userResp := UserResp{
@@ -143,6 +144,7 @@ func CurrentUser(c *gin.Context) {
 //	@Failure		400		{object}	common.jsonResult{data=string}	"Bad Request"
 //	@Failure		403		{object}	common.jsonResult{data=string}	"Forbidden"
 //	@Router			/api/me [post]
+//	@Security		Authorization
 func UpdateCurrent(c *gin.Context) {
 	var req model.User
 	if err := c.ShouldBind(&req); err != nil {
@@ -172,10 +174,11 @@ func UpdateCurrent(c *gin.Context) {
 //	@Description	Generate a new 2FA (TOTP) secret for current user
 //	@Tags			Authentication
 //	@Produce		json
-//	@Success		200	{object}	common.jsonResult{data=common.mapResult{qr=string,secret=string}}	"Generated QR code and secret"
-//	@Failure		403	{object}	common.jsonResult{data=string}										"Forbidden"
-//	@Failure		500	{object}	common.jsonResult{data=string}										"Internal Server Error"
+//	@Success		200	{object}	common.jsonResult{data=object{qr=string,secret=string}}	"Generated QR code and secret"
+//	@Failure		403	{object}	common.jsonResult{data=string}							"Forbidden"
+//	@Failure		500	{object}	common.jsonResult{data=string}							"Internal Server Error"
 //	@Router			/api/auth/2fa/generate [post]
+//	@Security		Authorization
 func Generate2FA(c *gin.Context) {
 	user := c.Request.Context().Value(conf.UserKey).(*model.User)
 	if user.IsGuest() {
@@ -210,6 +213,21 @@ type Verify2FAReq struct {
 	Secret string `json:"secret" binding:"required"`
 }
 
+// Verify2FA
+//
+//	@Summary		Verify and enable 2FA
+//
+//	@Description	Verify the provided 2FA code and enable 2FA for the current user
+//	@Tags			Authentication
+//	@Accept			json
+//	@Produce		json
+//	@Param			data	body		Verify2FAReq					true	"2FA verification data"
+//	@Success		200		{object}	common.jsonResult{data=string}	"2FA enabled successfully"
+//	@Failure		400		{object}	common.jsonResult{data=string}	"Bad Request"
+//	@Failure		403		{object}	common.jsonResult{data=string}	"Forbidden"
+//	@Failure		500		{object}	common.jsonResult{data=string}	"Internal Server Error"
+//	@Router			/api/auth/2fa/verify [post]
+//	@Security		Authorization
 func Verify2FA(c *gin.Context) {
 	var req Verify2FAReq
 	if err := c.ShouldBind(&req); err != nil {
@@ -242,6 +260,7 @@ func Verify2FA(c *gin.Context) {
 //	@Success		200	{object}	common.jsonResult{data=string}	"Logout successful"
 //	@Failure		500	{object}	common.jsonResult{data=string}	"Internal Server Error"
 //	@Router			/api/auth/logout [get]
+//	@Security		Authorization
 func LogOut(c *gin.Context) {
 	err := common.InvalidateToken(c.GetHeader("Authorization"))
 	if err != nil {

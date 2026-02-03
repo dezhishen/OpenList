@@ -239,6 +239,12 @@ type ArchiveDecompressReq struct {
 	Overwrite     bool     `json:"overwrite" form:"overwrite"`
 }
 
+// FsArchiveDecompress Decompress archive files
+//
+// @Summary		Decompress archive files
+// @Description	Decompress archive files to a specified directory
+// @Tags			FileSystem
+
 func FsArchiveDecompress(c *gin.Context) {
 	var req ArchiveDecompressReq
 	if err := c.ShouldBind(&req); err != nil {
@@ -405,6 +411,16 @@ func ArchiveInternalExtract(c *gin.Context) {
 	proxyInternalExtract(c, rc, size, fileName)
 }
 
+// ArchiveExtensions Get supported archive extensions
+//
+//	@Summary		Get supported archive extensions
+//	@Description	Get a list of supported archive extensions
+//	@Tags			Public
+//	@Accept			json
+//	@Produce		json
+//	@Success		200	{object}	common.jsonResult{data=[]string}	"List of archive extensions"
+//	@Failure		500	{object}	common.jsonResult{data=string}		"Internal Server Error"
+//	@Router			/api/public/archive_extensions [get]
 func ArchiveExtensions(c *gin.Context) {
 	var ext []string
 	for key := range tool.Tools {

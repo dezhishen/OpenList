@@ -14,11 +14,56 @@ import (
 //go:embed *
 var docsFS embed.FS
 
-var patchedVersionYaml []byte
-var patchedVersionJson []byte
+func InitDoc(r *gin.RouterGroup) {
+	if conf.Conf.Doc.Enable == false {
+		log.Debugf("doc is disabled")
+		return
+	}
+	// 提供 /doc.yaml 路由
+	log.Debugf("doc is enabled")
+	patchDoc()
+	r.GET("/doc.yaml", func(c *gin.Context) {
+		if patchedYaml == nil {
+			c.String(404, "not found")
+			return
+		}
+		c.Data(http.StatusOK, "application/x-yaml", patchPathForYaml())
+	})
+	r.GET("/doc.json", func(c *gin.Context) {
+		if patchedJson == nil {
+			c.String(404, "not found")
+			return
+		}
+		c.Data(http.StatusOK, "application/json", patchPathForJson())
+	})
+}
+
+var patchedYaml []byte
+var patchedJson []byte
 var patchOnce sync.Once
 
-func patchVersion() {
+func patchPathForYaml() []byte {
+	if patchedYaml == nil {
+		return nil
+	}
+	basePath := conf.URL.Path
+	// 替换 YAML 中的 basePath: /
+	reBasePath := regexp.MustCompile(`(?m)^(\s*basePath:).+$`)
+	return reBasePath.ReplaceAll(patchedYaml, []byte("${1} "+basePath))
+
+}
+
+func patchPathForJson() []byte {
+	if patchedJson == nil {
+		return nil
+	}
+	basePath := conf.URL.Path
+	// 替换 JSON 中的 "basePath": "/"
+	reJsonBasePath := regexp.MustCompile(`"basePath":\s*"[^"]*"`)
+	return reJsonBasePath.ReplaceAll(patchedJson, []byte("\"basePath\": \""+basePath+"\""))
+}
+
+func patchDoc() {
 	patchOnce.Do(func() {
 		version := conf.Conf.LastLaunchedVersion
 		yamlBytes, err := docsFS.ReadFile("swagger.yaml")
@@ -34,34 +79,10 @@ func patchVersion() {
 
 		// 替换 YAML 中的 version: XXX
 		reYaml := regexp.MustCompile(`(?m)^(\s*version:).+$`)
-		patchedVersionYaml = reYaml.ReplaceAll(yamlBytes, []byte("${1} "+version))
+		patchedYaml = reYaml.ReplaceAll(yamlBytes, []byte("${1} "+version))
 
 		// 替换 JSON 中的 "version": "XXX"
 		reJson := regexp.MustCompile(`"version":\s*"[^"]*"`)
-		patchedVersionJson = reJson.ReplaceAll(jsonBytes, []byte("\"version\": \""+version+"\""))
-	})
-}
-
-func InitDoc(r *gin.RouterGroup) {
-	if conf.Conf.Doc.Enable == false {
-		log.Debugf("doc is disabled")
-		return
-	}
-	// 提供 /doc.yaml 路由
-	log.Debugf("doc is enabled")
-	patchVersion()
-	r.GET("/doc.yaml", func(c *gin.Context) {
-		if patchedVersionYaml == nil {
-			c.String(404, "not found")
-			return
-		}
-		c.Data(http.StatusOK, "application/x-yaml", patchedVersionYaml)
-	})
-	r.GET("/doc.json", func(c *gin.Context) {
-		if patchedVersionJson == nil {
-			c.String(404, "not found")
-			return
-		}
-		c.Data(http.StatusOK, "application/json", patchedVersionJson)
+		patchedJson = reJson.ReplaceAll(jsonBytes, []byte("\"version\": \""+version+"\""))
 	})
 }

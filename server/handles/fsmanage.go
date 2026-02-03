@@ -24,6 +24,19 @@ type MkdirOrLinkReq struct {
 	Path string `json:"path" form:"path"`
 }
 
+// FsMkdir create directory
+//
+//	@Summary		Create Directory
+//	@Description	Create a new directory at the specified path.
+//	@Tags			Filesystem
+//	@Accept			json
+//	@Produce		json
+//	@Param			data	body		MkdirOrLinkReq					true	"Directory creation request"
+//	@Success		200		{object}	common.jsonResult{data=string}	"Success response"
+//	@Failure		400		{object}	common.jsonResult{data=string}	"Bad request"
+//	@Failure		403		{object}	common.jsonResult{data=string}	"Forbidden"
+//	@Failure		500		{object}	common.jsonResult{data=string}	"Internal server error"
+//	@Router			/api/fs/mkdir [post]
 func FsMkdir(c *gin.Context) {
 	var req MkdirOrLinkReq
 	if err := c.ShouldBind(&req); err != nil {
@@ -65,6 +78,19 @@ type MoveCopyReq struct {
 	Merge        bool     `json:"merge"`
 }
 
+// FsMove move file
+//
+//	@Summary		Move Files
+//	@Description	Move files from source directory to destination directory.
+//	@Tags			Filesystem
+//	@Accept			json
+//	@Produce		json
+//	@Param			data	body		MoveCopyReq						true	"Move request"
+//	@Success		200		{object}	common.jsonResult{data=string}	"Move successful"
+//	@Failure		400		{object}	common.jsonResult{data=string}	"Bad Request"
+//	@Failure		500		{object}	common.jsonResult{data=string}	"Internal Server Error"
+//	@Router			/api/fs/move [post]
+//	@Security		Authorization
 func FsMove(c *gin.Context) {
 	var req MoveCopyReq
 	if err := c.ShouldBind(&req); err != nil {
@@ -132,6 +158,19 @@ func FsMove(c *gin.Context) {
 	}
 }
 
+// FsCopy Copy files or directories
+//
+//	@Summary		Copy files or directories
+//	@Description	Copy files or directories from source directory to destination directory.
+//	@Tags			Filesystem
+//	@Accept			json
+//	@Produce		json
+//	@Param			data	body		MoveCopyReq						true	"Copy request"
+//	@Success		200		{object}	common.jsonResult{data=string}	"Copy successful"
+//	@Failure		400		{object}	common.jsonResult{data=string}	"Bad Request"
+//	@Failure		500		{object}	common.jsonResult{data=string}	"Internal Server Error"
+//	@Router			/api/fs/copy [post]
+//	@Security		Authorization
 func FsCopy(c *gin.Context) {
 	var req MoveCopyReq
 	if err := c.ShouldBind(&req); err != nil {
@@ -214,6 +253,19 @@ type RenameReq struct {
 	Overwrite bool   `json:"overwrite"`
 }
 
+// FsRename rename file
+//
+//	@Summary		Rename File
+//	@Description	Rename a file or directory at the specified path.
+//	@Tags			Filesystem
+//	@Accept			json
+//	@Produce		json
+//	@Param			data	body		RenameReq						true	"Rename request"
+//	@Success		200		{object}	common.jsonResult{data=string}	"Success response"
+//	@Failure		400		{object}	common.jsonResult{data=string}	"Bad request"
+//	@Failure		403		{object}	common.jsonResult{data=string}	"Forbidden"
+//	@Failure		500		{object}	common.jsonResult{data=string}	"Internal server error"
+//	@Router			/api/fs/rename [post]
 func FsRename(c *gin.Context) {
 	var req RenameReq
 	if err := c.ShouldBind(&req); err != nil {
@@ -261,6 +313,19 @@ type RemoveReq struct {
 	Names []string `json:"names"`
 }
 
+// FsRemove Remove files or directories
+//
+//	@Summary		Remove Files or Directories
+//	@Description	Remove files or directories from the specified directory.
+//	@Tags			Filesystem
+//	@Accept			json
+//	@Produce		json
+//	@Param			data	body		RemoveReq						true	"Remove request"
+//	@Success		200		{object}	common.jsonResult{data=string}	"Remove successful"
+//	@Failure		400		{object}	common.jsonResult{data=string}	"Bad Request"
+//	@Failure		500		{object}	common.jsonResult{data=string}	"Internal Server Error"
+//	@Router			/api/fs/remove [post]
+//	@Security		Authorization
 func FsRemove(c *gin.Context) {
 	var req RemoveReq
 	if err := c.ShouldBind(&req); err != nil {
@@ -296,6 +361,19 @@ type RemoveEmptyDirectoryReq struct {
 	SrcDir string `json:"src_dir"`
 }
 
+// FsRemoveEmptyDirectory Remove empty directories
+//
+//	@Summary		Remove Empty Directories
+//	@Description	Recursively remove empty directories
+//	@Tags			Filesystem
+//	@Accept			json
+//	@Produce		json
+//	@Param			data	body		RemoveEmptyDirectoryReq			true	"Remove empty directories request"
+//	@Success		200		{object}	common.jsonResult{data=string}	"Remove empty directories successful"
+//	@Failure		400		{object}	common.jsonResult{data=string}	"Bad Request"
+//	@Failure		500		{object}	common.jsonResult{data=string}	"Internal Server Error"
+//	@Router			/api/fs/remove_empty_directory [post]
+//	@Security		Authorization
 func FsRemoveEmptyDirectory(c *gin.Context) {
 	var req RemoveEmptyDirectoryReq
 	if err := c.ShouldBind(&req); err != nil {
@@ -392,6 +470,19 @@ func FsRemoveEmptyDirectory(c *gin.Context) {
 }
 
 // Link return real link, just for proxy program, it may contain cookie, so just allowed for admin
+//
+//	@Summary		Get Real Link
+//	@Description	Get the real link of the specified path. This endpoint is intended for use by proxy programs and may contain cookies, so it is only allowed for admin users.
+//	@Tags			Filesystem
+//	@Accept			json
+//	@Produce		json
+//	@Param			data	body		MkdirOrLinkReq						true	"Link request"
+//	@Success		200		{object}	common.jsonResult{data=model.Link}	"Success response"
+//	@Failure		400		{object}	common.jsonResult{data=string}		"Bad request"
+//	@Failure		403		{object}	common.jsonResult{data=string}		"Forbidden"
+//	@Failure		500		{object}	common.jsonResult{data=string}		"Internal server error"
+//	@Router			/api/fs/link [post]
+//	@Security		Authorization
 func Link(c *gin.Context) {
 	var req MkdirOrLinkReq
 	if err := c.ShouldBind(&req); err != nil {

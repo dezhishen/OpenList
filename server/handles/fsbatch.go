@@ -22,6 +22,19 @@ type RecursiveMoveReq struct {
 	ConflictPolicy string `json:"conflict_policy"`
 }
 
+// FsRecursiveMove perform recursive move operation
+//
+//	@Summary		Recursive move
+//	@Description	Move files/folders recursively (preserves directory structure)
+//	@Tags			Filesystem
+//	@Accept			json
+//	@Produce		json
+//	@Param			move	body		RecursiveMoveReq				true	"Recursive move request"
+//	@Success		200		{object}	common.jsonResult{data=string}	"Recursive move successful"
+//	@Failure		400		{object}	common.jsonResult{data=string}	"Bad Request"
+//	@Failure		500		{object}	common.jsonResult{data=string}	"Internal Server Error"
+//	@Router			/api/fs/recursive_move [post]
+//	@Security		Authorization
 func FsRecursiveMove(c *gin.Context) {
 	var req RecursiveMoveReq
 	if err := c.ShouldBind(&req); err != nil {
@@ -143,6 +156,20 @@ type BatchRenameReq struct {
 	} `json:"rename_objects"`
 }
 
+// FsBatchRename perform batch rename operation
+// Rename multiple files using a pattern
+//
+//	@Summary		Batch Rename Files
+//	@Description	Rename multiple files in a specified directory using a list of source and new names
+//	@Tags			Filesystem
+//	@Accept			json
+//	@Produce		json
+//	@Param			rename	body		BatchRenameReq					true	"Batch rename request"
+//	@Success		200		{object}	common.jsonResult{data=string}	"Batch rename successful"
+//	@Failure		400		{object}	common.jsonResult{data=string}	"Bad Request"
+//	@Failure		500		{object}	common.jsonResult{data=string}	"Internal Server Error"
+//	@Router			/api/fs/batch_rename [post]
+//	@Security		Authorization
 func FsBatchRename(c *gin.Context) {
 	var req BatchRenameReq
 	if err := c.ShouldBind(&req); err != nil {
@@ -193,6 +220,19 @@ type RegexRenameReq struct {
 	NewNameRegex string `json:"new_name_regex"`
 }
 
+// FsRegexRename Regex-based rename
+//
+//	@Summary		Regex-based Rename Files
+//	@Description	Rename files in a specified directory using regex patterns for source and new names
+//	@Tags			Filesystem
+//	@Accept			json
+//	@Produce		json
+//	@Param			rename	body		RegexRenameReq					true	"Regex-based rename request"
+//	@Success		200		{object}	common.jsonResult{data=string}	"Regex-based rename successful"
+//	@Failure		400		{object}	common.jsonResult{data=string}	"Bad Request"
+//	@Failure		500		{object}	common.jsonResult{data=string}	"Internal Server Error"
+//	@Router			/api/fs/regex_rename [post]
+//	@Security		Authorization
 func FsRegexRename(c *gin.Context) {
 	var req RegexRenameReq
 	if err := c.ShouldBind(&req); err != nil {

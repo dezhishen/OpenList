@@ -25,6 +25,18 @@ type SetAria2Req struct {
 	Secret string `json:"secret" form:"secret"`
 }
 
+// SetAria2 config aria2 for offline download
+//
+//	@Summary		Configure Aria2 for Offline Download
+//	@Description	Configure Aria2 settings for offline download tasks
+//	@Tags			Admin
+//	@Accept			json
+//	@Produce		json
+//	@Param			aria2	body		SetAria2Req						true	"Aria2 configuration data"
+//	@Success		200		{object}	common.jsonResult{data=string}	"Aria2 version on successful configuration"
+//	@Failure		400		{object}	common.jsonResult{data=string}	"Bad Request"
+//	@Failure		500		{object}	common.jsonResult{data=string}	"Internal Server Error"
+//	@Router			/api/admin/setting/set_aria2 [post]
 func SetAria2(c *gin.Context) {
 	var req SetAria2Req
 	if err := c.ShouldBind(&req); err != nil {
@@ -57,6 +69,19 @@ type SetQbittorrentReq struct {
 	Seedtime string `json:"seedtime" form:"seedtime"`
 }
 
+// SetQbittorrent config qBittorrent for offline download
+//
+//	@Summary		Configure qBittorrent for Offline Download
+//
+//	@Description	Configure qBittorrent settings for offline download tasks
+//	@Tags			Admin
+//	@Accept			json
+//	@Produce		json
+//	@Param			qbittorrent	body		SetQbittorrentReq				true	"qBittorrent configuration data"
+//	@Success		200			{object}	common.jsonResult{data=string}	"Success message"
+//	@Failure		400			{object}	common.jsonResult{data=string}	"Bad Request"
+//	@Failure		500			{object}	common.jsonResult{data=string}	"Internal Server Error"
+//	@Router			/api/admin/setting/set_aria2 [post]
 func SetQbittorrent(c *gin.Context) {
 	var req SetQbittorrentReq
 	if err := c.ShouldBind(&req); err != nil {
@@ -88,6 +113,18 @@ type SetTransmissionReq struct {
 	Seedtime string `json:"seedtime" form:"seedtime"`
 }
 
+// SetTransmission config Transmission for offline download
+//
+//	@Summary		Configure Transmission for Offline Download
+//	@Description	Configure Transmission settings for offline download tasks
+//	@Tags			Admin
+//	@Accept			json
+//	@Produce		json
+//	@Param			transmission	body		SetTransmissionReq				true	"Transmission configuration data"
+//	@Success		200				{object}	common.jsonResult{data=string}	"Success message"
+//	@Failure		400				{object}	common.jsonResult{data=string}	"Bad Request"
+//	@Failure		500				{object}	common.jsonResult{data=string}	"Internal Server Error"
+//	@Router			/api/admin/setting/set_transmission [post]
 func SetTransmission(c *gin.Context) {
 	var req SetTransmissionReq
 	if err := c.ShouldBind(&req); err != nil {
@@ -118,6 +155,19 @@ type Set115Req struct {
 	TempDir string `json:"temp_dir" form:"temp_dir"`
 }
 
+// Set115 config 115 Cloud for offline download
+//
+//	@Summary		Configure 115 Cloud for Offline Download
+//
+//	@Description	Configure 115 Cloud settings for offline download tasks
+//	@Tags			Admin
+//	@Accept			json
+//	@Produce		json
+//	@Param			cloud	body		Set115Req						true	"115 Cloud configuration data"
+//	@Success		200		{object}	common.jsonResult{data=string}	"Success message"
+//	@Failure		400		{object}	common.jsonResult{data=string}	"Bad Request"
+//	@Failure		500		{object}	common.jsonResult{data=string}	"Internal Server Error"
+//	@Router			/api/admin/setting/set_115 [post]
 func Set115(c *gin.Context) {
 	var req Set115Req
 	if err := c.ShouldBind(&req); err != nil {
@@ -162,6 +212,19 @@ type Set115OpenReq struct {
 	TempDir string `json:"temp_dir" form:"temp_dir"`
 }
 
+// Set115Open config 115 Open for offline download
+//
+//	@Summary		Configure 115 Open for Offline Download
+//
+//	@Description	Configure 115 Open settings for offline download tasks
+//	@Tags			Admin
+//	@Accept			json
+//	@Produce		json
+//	@Param			cloud	body		Set115OpenReq					true	"115 Open configuration data"
+//	@Success		200		{object}	common.jsonResult{data=string}	"Success message"
+//	@Failure		400		{object}	common.jsonResult{data=string}	"Bad Request"
+//	@Failure		500		{object}	common.jsonResult{data=string}	"Internal Server Error"
+//	@Router			/api/admin/setting/set_115_open [post]
 func Set115Open(c *gin.Context) {
 	var req Set115OpenReq
 	if err := c.ShouldBind(&req); err != nil {
@@ -206,6 +269,18 @@ type Set123PanReq struct {
 	TempDir string `json:"temp_dir" form:"temp_dir"`
 }
 
+// Set123Pan config 123 Pan for offline download
+//
+//	@Summary		Configure 123 Pan for Offline Download
+//	@Description	Configure 123 Pan settings for offline download tasks
+//	@Tags			Admin
+//	@Accept			json
+//	@Produce		json
+//	@Param			cloud	body		Set123PanReq					true	"123 Pan configuration data"
+//	@Success		200		{object}	common.jsonResult{data=string}	"Success message"
+//	@Failure		400		{object}	common.jsonResult{data=string}	"Bad Request"
+//	@Failure		500		{object}	common.jsonResult{data=string}	"Internal Server Error"
+//	@Router			/api/admin/setting/set_123pan [post]
 func Set123Pan(c *gin.Context) {
 	var req Set123PanReq
 	if err := c.ShouldBind(&req); err != nil {
@@ -251,6 +326,18 @@ type Set123OpenReq struct {
 	CallbackUrl string `json:"callback_url" form:"callback_url"`
 }
 
+// Set123Open config 123 Open for offline download
+//
+//	@Summary		Configure 123 Open for Offline Download
+//	@Description	Configure 123 Open settings for offline download tasks
+//	@Tags			Admin
+//	@Accept			json
+//	@Produce		json
+//	@Param			cloud	body		Set123OpenReq					true	"123 Open configuration data"
+//	@Success		200		{object}	common.jsonResult{data=string}	"Success message"
+//	@Failure		400		{object}	common.jsonResult{data=string}	"Bad Request"
+//	@Failure		500		{object}	common.jsonResult{data=string}	"Internal Server Error"
+//	@Router			/api/admin/setting/set_123_open [post]
 func Set123Open(c *gin.Context) {
 	var req Set123OpenReq
 	if err := c.ShouldBind(&req); err != nil {
@@ -296,6 +383,18 @@ type SetPikPakReq struct {
 	TempDir string `json:"temp_dir" form:"temp_dir"`
 }
 
+// SetPikPak config PikPak for offline download
+//
+//	@Summary		Configure PikPak for Offline Download
+//	@Description	Configure PikPak settings for offline download tasks
+//	@Tags			Admin
+//	@Accept			json
+//	@Produce		json
+//	@Param			cloud	body		SetPikPakReq					true	"PikPak configuration data"
+//	@Success		200		{object}	common.jsonResult{data=string}	"Success message"
+//	@Failure		400		{object}	common.jsonResult{data=string}	"Bad Request"
+//	@Failure		500		{object}	common.jsonResult{data=string}	"Internal Server Error"
+//	@Router			/api/admin/setting/set_pikpak [post]
 func SetPikPak(c *gin.Context) {
 	var req SetPikPakReq
 	if err := c.ShouldBind(&req); err != nil {
@@ -340,6 +439,18 @@ type SetThunderReq struct {
 	TempDir string `json:"temp_dir" form:"temp_dir"`
 }
 
+// SetThunder config Thunder for offline download
+//
+//	@Summary		Configure Thunder for Offline Download
+//	@Description	Configure Thunder settings for offline download tasks
+//	@Tags			Admin
+//	@Accept			json
+//	@Produce		json
+//	@Param			cloud	body		SetThunderReq					true	"Thunder configuration data"
+//	@Success		200		{object}	common.jsonResult{data=string}	"Success message"
+//	@Failure		400		{object}	common.jsonResult{data=string}	"Bad Request"
+//	@Failure		500		{object}	common.jsonResult{data=string}	"Internal Server Error"
+//	@Router			/api/admin/setting/set_thunder [post]
 func SetThunder(c *gin.Context) {
 	var req SetThunderReq
 	if err := c.ShouldBind(&req); err != nil {
@@ -384,6 +495,18 @@ type SetThunderXReq struct {
 	TempDir string `json:"temp_dir" form:"temp_dir"`
 }
 
+// SetThunderX config ThunderX for offline download
+//
+//	@Summary		Configure ThunderX for Offline Download
+//	@Description	Configure ThunderX settings for offline download tasks
+//	@Tags			Admin
+//	@Accept			json
+//	@Produce		json
+//	@Param			cloud	body		SetThunderXReq					true	"ThunderX configuration data"
+//	@Success		200		{object}	common.jsonResult{data=string}	"Success message"
+//	@Failure		400		{object}	common.jsonResult{data=string}	"Bad Request"
+//	@Failure		500		{object}	common.jsonResult{data=string}	"Internal Server Error"
+//	@Router			/api/admin/setting/set_thunderx [post]
 func SetThunderX(c *gin.Context) {
 	var req SetThunderXReq
 	if err := c.ShouldBind(&req); err != nil {
@@ -428,6 +551,18 @@ type SetThunderBrowserReq struct {
 	TempDir string `json:"temp_dir" form:"temp_dir"`
 }
 
+// SetThunderBrowser config Thunder Browser for offline download
+//
+//	@Summary		Configure Thunder Browser for Offline Download
+//	@Description	Configure Thunder Browser settings for offline download tasks
+//	@Tags			Admin
+//	@Accept			json
+//	@Produce		json
+//	@Param			cloud	body		SetThunderBrowserReq			true	"Thunder Browser configuration data"
+//	@Success		200		{object}	common.jsonResult{data=string}	"Success message"
+//	@Failure		400		{object}	common.jsonResult{data=string}	"Bad Request"
+//	@Failure		500		{object}	common.jsonResult{data=string}	"Internal Server Error"
+//	@Router			/api/admin/setting/set_thunder_browser [post]
 func SetThunderBrowser(c *gin.Context) {
 	var req SetThunderBrowserReq
 	if err := c.ShouldBind(&req); err != nil {
@@ -469,6 +604,16 @@ func SetThunderBrowser(c *gin.Context) {
 	common.SuccessResp(c, "ok")
 }
 
+// OfflineDownloadTools godoc
+//
+//	@Summary		Get Offline Download Tools
+//	@Description	Get a list of available offline download tools
+//	@Tags			Public
+//	@Accept			json
+//	@Produce		json
+//	@Success		200	{object}	common.jsonResult{data=[]string}	"List of offline download tools"
+//	@Failure		500	{object}	common.jsonResult{data=string}		"Internal Server Error"
+//	@Router			/api/public/offline_download_tools [get]
 func OfflineDownloadTools(c *gin.Context) {
 	tools := tool.Tools.Names()
 	common.SuccessResp(c, tools)
@@ -481,6 +626,20 @@ type AddOfflineDownloadReq struct {
 	DeletePolicy string   `json:"delete_policy"`
 }
 
+// AddOfflineDownload add offline download task
+//
+//	@Summary		Add offline download task
+//	@Description	Create an offline download task (HTTP/magnet/torrent)
+//	@Tags			FileSystem
+//	@Accept			json
+//	@Produce		json
+//	@Param			task	body		AddOfflineDownloadReq							true	"Offline download task data"
+//	@Success		200		{object}	common.jsonResult{data=map[string]interface{}}	"Details of the created offline download tasks"
+//	@Failure		400		{object}	common.jsonResult{data=string}					"Bad Request"
+//	@Failure		403		{object}	common.jsonResult{data=string}					"Permission Denied"
+//	@Failure		500		{object}	common.jsonResult{data=string}					"Internal Server Error"
+//	@Router			/api/fs/offline_download/add [post]
+//	@Security		Authorization
 func AddOfflineDownload(c *gin.Context) {
 	user := c.Request.Context().Value(conf.UserKey).(*model.User)
 	if !user.CanAddOfflineDownloadTasks() {

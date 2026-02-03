@@ -54,6 +54,18 @@ func ssoRedirectUri(c *gin.Context, useCompatibility bool, method string) string
 	}
 }
 
+// SSOLoginRedirect handles SSO login redirection
+//
+//	@summary		Redirect to configured SSO provider for authentication
+//	@description	Redirect users to the configured Single Sign-On (SSO) provider for authentication.
+//	@tags			Authentication
+//	@accept			json
+//	@produce		json
+//	@param			method	query	string	true	"SSO method to use"
+//	@success		302		"Redirect to SSO provider"
+//	@failure		400		{object}	common.jsonResult{data=string}	"Bad Request"
+//	@failure		403		{object}	common.jsonResult{data=string}	"Forbidden"
+//	@router			/api/auth/sso_redirect [get]
 func SSOLoginRedirect(c *gin.Context) {
 	method := c.Query("method")
 	useCompatibility := setting.GetBool(conf.SSOCompatibilityMode)
@@ -279,6 +291,19 @@ func OIDCLoginCallback(c *gin.Context) {
 	}
 }
 
+// SSOLoginCallback handles SSO login callback
+//
+//	@summary		Handle SSO provider callback and authenticate user
+//	@description	Process the callback from the SSO provider, authenticate the user, and generate a token.
+//	@tags			Authentication
+//	@accept			json
+//	@produce		json
+//	@param			method	query		string											true	"SSO method used"
+//	@success		200		{object}	common.jsonResult{data=object{token=string}}	"Login successful, return token"
+//	@failure		400		{object}	common.jsonResult{data=string}					"Bad Request"
+//	@router			/api/auth/sso_callback [get]
+//	@router			/api/auth/get_sso_id [get]
+//	@router			/api/auth/sso_get_token [get]
 func SSOLoginCallback(c *gin.Context) {
 	enabled := setting.GetBool(conf.SSOLoginEnabled)
 	usecompatibility := setting.GetBool(conf.SSOCompatibilityMode)

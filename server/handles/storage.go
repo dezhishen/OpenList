@@ -71,6 +71,18 @@ func makeStorageResp(ctx *gin.Context, storages []model.Storage) []*StorageResp 
 	return ret
 }
 
+// ListStorages
+//
+//	@Summary		List all storages
+//	@Description	Get a paginated list of storages
+//	@Tags			Admin
+//	@Accept			json
+//	@Produce		json
+//	@Param			page	query		model.PageReq	false	"Query parameters for pagination"
+//	@Success		200		{object}	common.PageResp{content=[]StorageResp,total=int}
+//	@Failure		400		{object}	common.jsonResult{data=string}	"Bad Request"
+//	@Failure		500		{object}	common.jsonResult{data=string}	"Internal Server Error"
+//	@Router			/api/admin/storage/list [get]
 func ListStorages(c *gin.Context) {
 	var req model.PageReq
 	if err := c.ShouldBind(&req); err != nil {
@@ -90,6 +102,18 @@ func ListStorages(c *gin.Context) {
 	})
 }
 
+// CreateStorage create a new storage
+//
+//	@Summary		Create Storage
+//	@Description	Create a new storage
+//	@Tags			Admin
+//	@Accept			json
+//	@Produce		json
+//	@Param			storage	body		model.Storage							true	"Storage data"
+//	@Success		200		{object}	common.jsonResult{data=object{id=int}}	"Success message with new storage ID"
+//	@Failure		400		{object}	common.jsonResult{data=string}			"Bad Request"
+//	@Failure		500		{object}	common.jsonResult{data=string}			"Internal Server Error"
+//	@Router			/api/admin/storage/create [post]
 func CreateStorage(c *gin.Context) {
 	var req model.Storage
 	if err := c.ShouldBind(&req); err != nil {
@@ -107,6 +131,18 @@ func CreateStorage(c *gin.Context) {
 	}
 }
 
+// UpdateStorage update an existing storage
+//
+//	@Summary		Update Storage
+//	@Description	Update an existing storage
+//	@Tags			Admin
+//	@Accept			json
+//	@Produce		json
+//	@Param			storage	body		model.Storage					true	"Storage data"
+//	@Success		200		{object}	common.jsonResult{data=string}	"Success message"
+//	@Failure		400		{object}	common.jsonResult{data=string}	"Bad Request"
+//	@Failure		500		{object}	common.jsonResult{data=string}	"Internal Server Error"
+//	@Router			/api/admin/storage/update [post]
 func UpdateStorage(c *gin.Context) {
 	var req model.Storage
 	if err := c.ShouldBind(&req); err != nil {
@@ -120,6 +156,17 @@ func UpdateStorage(c *gin.Context) {
 	}
 }
 
+// DeleteStorage delete a storage by id
+//
+//	@Summary		Delete Storage
+//	@Description	Delete a storage by ID
+//	@Tags			Admin
+//	@Produce		json
+//	@Param			id	query		int								true	"Storage ID"
+//	@Success		200	{object}	common.jsonResult{data=string}	"Success message"
+//	@Failure		400	{object}	common.jsonResult{data=string}	"Bad Request"
+//	@Failure		500	{object}	common.jsonResult{data=string}	"Internal Server Error"
+//	@Router			/api/admin/storage/delete [post]
 func DeleteStorage(c *gin.Context) {
 	idStr := c.Query("id")
 	id, err := strconv.Atoi(idStr)
@@ -134,6 +181,17 @@ func DeleteStorage(c *gin.Context) {
 	common.SuccessResp(c)
 }
 
+// DisableStorage disable a storage by id
+//
+//	@Summary		Disable Storage
+//	@Description	Disable a storage by ID
+//	@Tags			Admin
+//	@Produce		json
+//	@Param			id	query		int								true	"Storage ID"
+//	@Success		200	{object}	common.jsonResult{data=string}	"Success message"
+//	@Failure		400	{object}	common.jsonResult{data=string}	"Bad Request"
+//	@Failure		500	{object}	common.jsonResult{data=string}	"Internal Server Error"
+//	@Router			/api/admin/storage/disable [post]
 func DisableStorage(c *gin.Context) {
 	idStr := c.Query("id")
 	id, err := strconv.Atoi(idStr)
@@ -148,6 +206,17 @@ func DisableStorage(c *gin.Context) {
 	common.SuccessResp(c)
 }
 
+// EnableStorage enable a storage by id
+//
+//	@Summary		Enable Storage
+//	@Description	Enable a storage by ID
+//	@Tags			Admin
+//	@Produce		json
+//	@Param			id	query		int								true	"Storage ID"
+//	@Success		200	{object}	common.jsonResult{data=string}	"Success message"
+//	@Failure		400	{object}	common.jsonResult{data=string}	"Bad Request"
+//	@Failure		500	{object}	common.jsonResult{data=string}	"Internal Server Error"
+//	@Router			/api/admin/storage/enable [post]
 func EnableStorage(c *gin.Context) {
 	idStr := c.Query("id")
 	id, err := strconv.Atoi(idStr)
@@ -162,6 +231,17 @@ func EnableStorage(c *gin.Context) {
 	common.SuccessResp(c)
 }
 
+// GetStorage get storage by id
+//
+//	@Summary		Get Storage
+//	@Description	Get storage details by ID
+//	@Tags			Admin
+//	@Produce		json
+//	@Param			id	query		int									true	"Storage ID"
+//	@Success		200	{object}	common.jsonResult{data=StorageResp}	"Storage details"
+//	@Failure		400	{object}	common.jsonResult{data=string}		"Bad Request"
+//	@Failure		500	{object}	common.jsonResult{data=string}		"Internal Server Error"
+//	@Router			/api/admin/storage/get [get]
 func GetStorage(c *gin.Context) {
 	idStr := c.Query("id")
 	id, err := strconv.Atoi(idStr)
@@ -177,6 +257,15 @@ func GetStorage(c *gin.Context) {
 	common.SuccessResp(c, storage)
 }
 
+// LoadAllStorages load all enabled storages
+//
+//	@Summary		Reload all storages
+//	@Description	Trigger loading of all enabled storages
+//	@Tags			Admin
+//	@Produce		json
+//	@Success		200	{object}	common.jsonResult{data=string}	"Success message"
+//	@Failure		500	{object}	common.jsonResult{data=string}	"Internal Server Error"
+//	@Router			/api/admin/storage/load_all [post]
 func LoadAllStorages(c *gin.Context) {
 	storages, err := db.GetEnabledStorages()
 	if err != nil {

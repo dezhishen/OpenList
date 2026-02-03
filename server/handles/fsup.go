@@ -38,6 +38,20 @@ func shouldIgnoreSystemFile(filename string) bool {
 	return false
 }
 
+// FsStream Upload file (stream)
+//
+//	@Summary		Upload file (stream)
+//	@Description	Upload file using streaming (for large files or programmatic uploads)
+//	@Tags			Filesystem
+//	@Accept			octet-stream
+//	@Produce		json
+//	@Param			file	path		string							true	"File path (URL-encoded, include filename)"
+//	@Success		200		{object}	common.jsonResult{data=string}	"File upload successful"
+//	@Failure		400		{object}	common.jsonResult{data=string}	"Bad Request"
+//	@Failure		403		{object}	common.jsonResult{data=string}	"Forbidden"
+//	@Failure		500		{object}	common.jsonResult{data=string}	"Internal Server Error"
+//	@Router			/api/fs/upload/stream [put]
+//	@Security		Authorization
 func FsStream(c *gin.Context) {
 	defer func() {
 		if n, _ := io.ReadFull(c.Request.Body, []byte{0}); n == 1 {
@@ -127,6 +141,21 @@ func FsStream(c *gin.Context) {
 	})
 }
 
+// FsForm Upload file (form)
+//
+//	@Summary		Upload file (form)
+//	@Description	Upload file using multipart form data (for browser uploads)
+//	@Tags			Filesystem
+//	@Accept			multipart/form-data
+//	@Produce		json
+//	@Param			file	formData	file							true	"File to upload"
+//	@Param			path	formData	string							true	"File path (include filename)"
+//	@Success		200		{object}	common.jsonResult{data=string}	"File upload successful"
+//	@Failure		400		{object}	common.jsonResult{data=string}	"Bad Request"
+//	@Failure		403		{object}	common.jsonResult{data=string}	"Forbidden"
+//	@Failure		500		{object}	common.jsonResult{data=string}	"Internal Server Error"
+//	@Router			/api/fs/upload/form [put]
+//	@Security		Authorization
 func FsForm(c *gin.Context) {
 	defer func() {
 		if n, _ := io.ReadFull(c.Request.Body, []byte{0}); n == 1 {

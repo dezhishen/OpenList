@@ -10,6 +10,18 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+// ListUsers
+//
+//	@Summary		List Users
+//	@Description	Get a paginated list of users
+//	@Tags			Admin
+//	@Accept			json
+//	@Produce		json
+//	@Param			page	query		model.PageReq	false	"Query parameters for pagination"
+//	@Success		200		{object}	common.PageResp{content=[]model.User,total=int}
+//	@Failure		400		{object}	common.jsonResult{data=string}	"Bad Request"
+//	@Failure		500		{object}	common.jsonResult{data=string}	"Internal Server Error"
+//	@Router			/api/admin/user/list [get]
 func ListUsers(c *gin.Context) {
 	var req model.PageReq
 	if err := c.ShouldBind(&req); err != nil {
@@ -29,6 +41,18 @@ func ListUsers(c *gin.Context) {
 	})
 }
 
+// CreateUser
+//
+//	@Summary		Create User
+//	@Description	Create a new user
+//	@Tags			Admin
+//	@Accept			json
+//	@Produce		json
+//	@Param			user	body		model.User						true	"User data"
+//	@Success		200		{object}	common.jsonResult{data=string}	"Success message"
+//	@Failure		400		{object}	common.jsonResult{data=string}	"Bad Request"
+//	@Failure		500		{object}	common.jsonResult{data=string}	"Internal Server Error"
+//	@Router			/api/admin/user/create [post]
 func CreateUser(c *gin.Context) {
 	var req model.User
 	if err := c.ShouldBind(&req); err != nil {
@@ -49,6 +73,18 @@ func CreateUser(c *gin.Context) {
 	}
 }
 
+// UpdateUser
+//
+//	@Summary		Update User
+//	@Description	Update an existing user
+//	@Tags			Admin
+//	@Accept			json
+//	@Produce		json
+//	@Param			user	body		model.User						true	"User data"
+//	@Success		200		{object}	common.jsonResult{data=string}	"Update successful"
+//	@Failure		400		{object}	common.jsonResult{data=string}	"Bad Request"
+//	@Failure		500		{object}	common.jsonResult{data=string}	"Internal Server Error"
+//	@Router			/api/admin/user/update [post]
 func UpdateUser(c *gin.Context) {
 	var req model.User
 	if err := c.ShouldBind(&req); err != nil {
@@ -85,6 +121,18 @@ func UpdateUser(c *gin.Context) {
 	}
 }
 
+// DeleteUser
+//
+//	@Summary		Delete User
+//	@Description	Delete a user by ID
+//	@Tags			Admin
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	query		int								true	"User ID"
+//	@Success		200	{object}	common.jsonResult{data=string}	"Deletion successful"
+//	@Failure		400	{object}	common.jsonResult{data=string}	"Bad Request"
+//	@Failure		500	{object}	common.jsonResult{data=string}	"Internal Server Error"
+//	@Router			/api/admin/user/delete [post]
 func DeleteUser(c *gin.Context) {
 	idStr := c.Query("id")
 	id, err := strconv.Atoi(idStr)
@@ -99,6 +147,18 @@ func DeleteUser(c *gin.Context) {
 	common.SuccessResp(c)
 }
 
+// GetUser
+//
+//	@Summary		Get User
+//	@Description	Get user by ID
+//	@Tags			Admin
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	query		int									true	"User ID"
+//	@Success		200	{object}	common.jsonResult{data=model.User}	"User object"
+//	@Failure		400	{object}	common.jsonResult{data=string}		"Bad Request"
+//	@Failure		500	{object}	common.jsonResult{data=string}		"Internal Server Error"
+//	@Router			/api/admin/user/get [get]
 func GetUser(c *gin.Context) {
 	idStr := c.Query("id")
 	id, err := strconv.Atoi(idStr)
@@ -114,6 +174,18 @@ func GetUser(c *gin.Context) {
 	common.SuccessResp(c, user)
 }
 
+// Cancel2FAById
+//
+//	@Summary		Cancel 2FA for User
+//	@Description	Cancel two-factor authentication for a user by ID
+//	@Tags			Admin
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	query		int								true	"User ID"
+//	@Success		200	{object}	common.jsonResult{data=string}	"Success message"
+//	@Failure		400	{object}	common.jsonResult{data=string}	"Bad Request"
+//	@Failure		500	{object}	common.jsonResult{data=string}	"Internal Server Error"
+//	@Router			/api/admin/user/cancel_2fa [post]
 func Cancel2FAById(c *gin.Context) {
 	idStr := c.Query("id")
 	id, err := strconv.Atoi(idStr)
@@ -128,6 +200,17 @@ func Cancel2FAById(c *gin.Context) {
 	common.SuccessResp(c)
 }
 
+// DelUserCache
+//
+//	@Summary		Delete User Cache
+//	@Description	Delete the cache for a user by username
+//	@Tags			Admin
+//	@Accept			json
+//	@Produce		json
+//	@Param			username	query		string							true	"Username"
+//	@Success		200			{object}	common.jsonResult{data=string}	"Success message"
+//	@Failure		500			{object}	common.jsonResult{data=string}	"Internal Server Error"
+//	@Router			/api/admin/user/del_cache [post]
 func DelUserCache(c *gin.Context) {
 	username := c.Query("username")
 	err := op.DelUserCache(username)

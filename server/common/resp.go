@@ -20,10 +20,3 @@ type jsonResult struct {
 }
 
 var _ jsonResult
-
-// mapResult is special JsonResult with map data
-// Just used in documentation
-type mapResult struct {
-}
-
-var _ mapResult

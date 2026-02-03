@@ -17,6 +17,16 @@ type Req struct {
 	Message string `json:"message" form:"message"`
 }
 
+// GetHandle handles POST /api/admin/message/get
+//
+// @Summary		Get Message
+// @Description	Get a message from the server
+// @Tags			Admin
+// @Accept			json
+// @Produce		json
+// @Success		200	{object}	common.jsonResult{data=Message}	"Message data"
+// @Failure		404	{object}	common.jsonResult{data=string}	"Not Found"
+// @Router			/api/admin/message/get [post]
 func (p *Http) GetHandle(c *gin.Context) {
 	select {
 	case message := <-p.ToSend:
@@ -26,6 +36,18 @@ func (p *Http) GetHandle(c *gin.Context) {
 	}
 }
 
+// SendHandle handles POST /api/admin/message/send
+//
+// @Summary		Send Message
+// @Description	Send a message to the server
+// @Tags			Admin
+// @Accept			json
+// @Produce		json
+// @Param			message	body		Req					true	"Message Data"
+// @Success		200		{object}	common.jsonResult{data=string}	"Success message"
+// @Failure		400		{object}	common.jsonResult{data=string}	"Bad Request"
+// @Failure		500		{object}	common.jsonResult{data=string}	"Internal Server Error"
+// @Router			/api/admin/message/send [post]
 func (p *Http) SendHandle(c *gin.Context) {
 	var req Req
 	if err := c.ShouldBind(&req); err != nil {

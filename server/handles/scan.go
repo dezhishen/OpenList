@@ -11,6 +11,17 @@ type ManualScanReq struct {
 	Limit float64 `json:"limit"`
 }
 
+// StartManualScan starts a manual scan for the specified path with an optional limit
+//
+//	@Summary		Start Manual Scan
+//	@Description	Start a manual scan for the specified path with an optional limit
+//	@Tags			Admin
+//	@Accept			json
+//	@Produce		json
+//	@Param			scan	body		ManualScanReq					true	"Manual Scan Data"
+//	@Success		200		{object}	common.jsonResult{data=string}	"Success message"
+//	@Failure		400		{object}	common.jsonResult{data=string}	"Bad Request"
+//	@Router			/api/admin/scan/start [post]
 func StartManualScan(c *gin.Context) {
 	var req ManualScanReq
 	if err := c.ShouldBind(&req); err != nil {
@@ -24,6 +35,15 @@ func StartManualScan(c *gin.Context) {
 	common.SuccessResp(c)
 }
 
+// StopManualScan stops the ongoing manual scan
+//
+//	@Summary		Stop Manual Scan
+//	@Description	Stop the ongoing manual scan
+//	@Tags			Admin
+//	@Produce		json
+//	@Success		200	{object}	common.jsonResult{data=string}	"Success message"
+//	@Failure		400	{object}	common.jsonResult{data=string}	"Bad Request"
+//	@Router			/api/admin/scan/stop [post]
 func StopManualScan(c *gin.Context) {
 	if !op.ManualScanRunning() {
 		common.ErrorStrResp(c, "manual scan is not running", 400)
@@ -38,6 +58,14 @@ type ManualScanResp struct {
 	IsDone   bool   `json:"is_done"`
 }
 
+// GetManualScanProgress gets the progress of the ongoing manual scan
+//
+//	@Summary		Get Manual Scan Progress
+//	@Description	Get the progress of the ongoing manual scan
+//	@Tags			Admin
+//	@Produce		json
+//	@Success		200	{object}	common.jsonResult{data=ManualScanResp}	"Manual scan progress data"
+//	@Router			/api/admin/scan/progress [get]
 func GetManualScanProgress(c *gin.Context) {
 	ret := ManualScanResp{
 		ObjCount: op.ScannedCount.Load(),

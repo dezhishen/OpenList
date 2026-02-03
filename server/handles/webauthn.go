@@ -18,6 +18,18 @@ import (
 	"github.com/go-webauthn/webauthn/webauthn"
 )
 
+// BeginAuthnLogin godoc
+//
+//	@Summary		Begin WebAuthn Login
+//	@Description	Begin WebAuthn Login
+//	@Tags			Authentication
+//	@Accept			json
+//	@Produce		json
+//	@Param			username	query		string	false	"Username for login. If not provided, client-side discoverable login will be used."
+//	@Success		200			{object}	object{options=protocol.CredentialAssertion,session=string}
+//	@Failure		400			{object}	common.jsonResult{data=string}	"Bad Request"
+//	@Failure		403			{object}	common.jsonResult{data=string}	"Forbidden"
+//	@Router			/api/authn/webauthn_begin_login [get]
 func BeginAuthnLogin(c *gin.Context) {
 	enabled := setting.GetBool(conf.WebauthnLoginEnabled)
 	if !enabled {
@@ -59,6 +71,19 @@ func BeginAuthnLogin(c *gin.Context) {
 	})
 }
 
+// FinishAuthnLogin godoc
+//
+//	@Summary		Finish WebAuthn Login
+//	@Description	Finish WebAuthn Login
+//	@Tags			Authentication
+//	@Accept			json
+//	@Produce		json
+//	@Param			session		header		string											true	"Base64-encoded session data from BeginAuthnLogin response"
+//	@Param			username	query		string											false	"Username for login. If not provided, client-side discoverable login will be used."
+//	@Success		200			{object}	common.jsonResult{data=object{token=string}}	"Login successful, returns token"
+//	@Failure		400			{object}	common.jsonResult{data=string}					"Bad Request"
+//	@Failure		403			{object}	common.jsonResult{data=string}					"Forbidden"
+//	@Router			/api/authn/webauthn_finish_login [post]
 func FinishAuthnLogin(c *gin.Context) {
 	enabled := setting.GetBool(conf.WebauthnLoginEnabled)
 	if !enabled {
@@ -119,6 +144,18 @@ func FinishAuthnLogin(c *gin.Context) {
 	common.SuccessResp(c, gin.H{"token": token})
 }
 
+// BeginAuthnRegistration godoc
+//
+//	@Summary		Begin WebAuthn Registration
+//	@Description	Begin WebAuthn Registration
+//	@Tags			Authentication
+//	@Accept			json
+//	@Produce		json
+//	@Success		200	{object}	object{options=protocol.CredentialCreation,session=string}
+//	@Failure		400	{object}	common.jsonResult{data=string}	"Bad Request"
+//	@Failure		403	{object}	common.jsonResult{data=string}	"Forbidden"
+//	@Router			/api/authn/webauthn_begin_registration [get]
+//	@Security		Authorization
 func BeginAuthnRegistration(c *gin.Context) {
 	enabled := setting.GetBool(conf.WebauthnLoginEnabled)
 	if !enabled {
@@ -149,6 +186,19 @@ func BeginAuthnRegistration(c *gin.Context) {
 	})
 }
 
+// FinishAuthnRegistration godoc
+//
+//	@Summary		Finish WebAuthn Registration
+//	@Description	Finish WebAuthn Registration
+//	@Tags			Authentication
+//	@Accept			json
+//	@Produce		json
+//	@Param			session	header		string							true	"Base64-encoded session data from BeginAuthnRegistration response"
+//	@Success		200		{object}	common.jsonResult{data=string}	"Registration successful"
+//	@Failure		400		{object}	common.jsonResult{data=string}	"Bad Request"
+//	@Failure		403		{object}	common.jsonResult{data=string}	"Forbidden"
+//	@Router			/api/authn/webauthn_finish_registration [post]
+//	@Security		Authorization
 func FinishAuthnRegistration(c *gin.Context) {
 	enabled := setting.GetBool(conf.WebauthnLoginEnabled)
 	if !enabled {
@@ -195,6 +245,19 @@ func FinishAuthnRegistration(c *gin.Context) {
 	common.SuccessResp(c, "Registered Successfully")
 }
 
+// DeleteAuthnLogin godoc
+//
+//	@Summary		Delete WebAuthn Credential
+//	@Description	Delete a WebAuthn credential for the current user
+//	@Tags			Authentication
+//	@Accept			json
+//	@Produce		json
+//	@Param			credential	body		object{id=string}				true	"Credential ID to delete"
+//	@Success		200			{object}	common.jsonResult{data=string}	"Deletion successful"
+//	@Failure		400			{object}	common.jsonResult{data=string}	"Bad Request"
+//	@Failure		403			{object}	common.jsonResult{data=string}	"Forbidden"
+//	@Router			/api/authn/webauthn_delete_credential [post]
+//	@Security		Authorization
 func DeleteAuthnLogin(c *gin.Context) {
 	user := c.Request.Context().Value(conf.UserKey).(*model.User)
 	type DeleteAuthnReq struct {
@@ -219,6 +282,18 @@ func DeleteAuthnLogin(c *gin.Context) {
 	common.SuccessResp(c, "Deleted Successfully")
 }
 
+// GetAuthnCredentials godoc
+//
+//	@Summary		Get WebAuthn Credentials
+//	@Description	Get all WebAuthn credentials for the current user
+//	@Tags			Authentication
+//	@Accept			json
+//	@Produce		json
+//	@Success		200	{object}	common.jsonResult{data=[]object{id=[]byte,finger_print=string}}	"List of WebAuthn credentials"
+//	@Failure		400	{object}	common.jsonResult{data=string}									"Bad Request"
+//	@Failure		403	{object}	common.jsonResult{data=string}									"Forbidden"
+//	@Router			/api/authn/webauthn_get_credentials [get]
+//	@Security		Authorization
 func GetAuthnCredentials(c *gin.Context) {
 	type WebAuthnCredentials struct {
 		ID          []byte `json:"id"`
